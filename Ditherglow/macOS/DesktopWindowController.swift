@@ -55,9 +55,20 @@ final class DesktopWindowController {
         window.ignoresMouseEvents = true
         window.isReleasedWhenClosed = false
         window.hasShadow = false
-        window.contentView = NSHostingView(rootView: DitherglowView(seed: seed))
+        window.contentView = NSHostingView(rootView: DesktopSkyView(seed: seed))
         window.setFrame(screen.frame, display: true)
         window.orderFront(nil)
         return window
+    }
+}
+
+/// The wallpaper's sky, kept in sync with the Settings window.
+private struct DesktopSkyView: View {
+    let seed: Float
+    @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
+    @AppStorage(Preferences.speedKey) private var speed = Preferences.defaultSpeed
+
+    var body: some View {
+        DitherglowView(speed: speed, seed: seed, blockSize: blockSize)
     }
 }

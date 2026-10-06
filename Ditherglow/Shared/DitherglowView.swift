@@ -14,9 +14,16 @@ struct DitherglowView: View {
     /// The sky moves slowly; a low frame rate is plenty and saves power.
     var framesPerSecond: Double = 12
 
-    private static let launch = Date()
     /// Start somewhere random so each launch looks different.
-    private static let timeOffset = Double.random(in: 0..<1000)
+    private static let launchAnchor = Anchor(date: Date(), time: .random(in: 0..<1000))
+
+    /// Animation time is `anchor.time` at `anchor.date`, then advances at `speed`.
+    private struct Anchor {
+        var date: Date
+        var time: Double
+    }
+
+    @State private var anchor = Self.launchAnchor
 
     var body: some View {
         // Copy into locals: the visualEffect closure runs off the main actor.
@@ -25,7 +32,7 @@ struct DitherglowView: View {
 
         TimelineView(.animation(minimumInterval: 1 / framesPerSecond)) { context in
             let colors = Sky.colors(at: dateOverride ?? context.date).flatMap { [$0.x, $0.y, $0.z] }
-            let time = Float(Self.timeOffset + context.date.timeIntervalSince(Self.launch) * speed)
+            let time = Float(anchor.time + context.date.timeIntervalSince(anchor.date) * speed)
 
             Rectangle()
                 .visualEffect { content, proxy in
@@ -39,6 +46,10 @@ struct DitherglowView: View {
                 }
         }
         .ignoresSafeArea()
+        .onChange(of: speed) { oldSpeed, _ in
+            let now = Date()
+            anchor = Anchor(date: now, time: anchor.time + now.timeIntervalSince(anchor.date) * oldSpeed)
+        }
     }
 }
 

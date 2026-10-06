@@ -4,9 +4,10 @@ import SwiftUI
 struct ContentView: View {
     @State private var followsClock = true
     @State private var hour = 12.0
+    @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
 
     var body: some View {
-        DitherglowView(dateOverride: followsClock ? nil : previewDate, speed: 0.5)
+        DitherglowView(dateOverride: followsClock ? nil : previewDate, speed: 0.5, blockSize: blockSize)
             .overlay(alignment: .bottom) {
                 HStack {
                     Toggle("Live", isOn: $followsClock)

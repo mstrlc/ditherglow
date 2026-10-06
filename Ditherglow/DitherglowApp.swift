@@ -4,10 +4,15 @@ import SwiftUI
 struct DitherglowApp: App {
     @State private var desktop = DesktopWindowController()
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.openSettings) private var openSettings
 
     var body: some Scene {
         Window("Ditherglow Preview", id: "preview") {
             ContentView()
+        }
+
+        Settings {
+            SettingsView()
         }
 
         MenuBarExtra("Ditherglow", systemImage: "sun.horizon") {
@@ -19,6 +24,11 @@ struct DitherglowApp: App {
                 openWindow(id: "preview")
                 NSApp.activate()
             }
+            Button("Settings…") {
+                openSettings()
+                NSApp.activate()
+            }
+            .keyboardShortcut(",")
             Divider()
             Button("Quit Ditherglow") {
                 NSApp.terminate(nil)
