@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/icon-dark.svg">
+    <img src="docs/icon.svg" width="128" height="128" alt="Ditherglow app icon: a dithered orb">
+  </picture>
+</p>
+
 # Ditherglow
 
 An animated, dithered wallpaper for macOS that follows the sun. Soft colour blobs drift across your desktop, rendered as chunky dither pixels, and the palette moves with the real sky outside: day, golden hour, sunset glow, blue hour, moonlight, and back again.
