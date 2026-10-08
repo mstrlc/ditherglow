@@ -6,13 +6,30 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D1000000000000000000001C /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = D1000000000000000000001B /* Sparkle */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		D1000000000000000000000A /* Ditherglow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ditherglow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D1000000000000000000001D /* Exceptions for "Ditherglow" folder in "Ditherglow" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				macOS/Info.plist,
+			);
+			target = D10000000000000000000003 /* Ditherglow */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D1000000000000000000000B /* Ditherglow */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D1000000000000000000001D /* Exceptions for "Ditherglow" folder in "Ditherglow" target */,
+			);
 			path = Ditherglow;
 			sourceTree = "<group>";
 		};
@@ -23,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1000000000000000000001C /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +83,7 @@
 			);
 			name = Ditherglow;
 			packageProductDependencies = (
+				D1000000000000000000001B /* Sparkle */,
 			);
 			productName = Ditherglow;
 			productReference = D1000000000000000000000A /* Ditherglow.app */;
@@ -94,6 +113,9 @@
 			);
 			mainGroup = D10000000000000000000001;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D1000000000000000000001A /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D10000000000000000000002 /* Products */;
 			projectDirPath = "";
@@ -196,6 +218,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Ditherglow/macOS/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -224,6 +247,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Ditherglow/macOS/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -263,6 +287,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D1000000000000000000001A /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D1000000000000000000001B /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1000000000000000000001A /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D10000000000000000000004 /* Project object */;
 }

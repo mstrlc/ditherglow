@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct DitherglowApp: App {
     @State private var desktop = DesktopWindowController()
+    @State private var updater = Updater()
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
 
@@ -14,6 +15,7 @@ struct DitherglowApp: App {
 
         Settings {
             SettingsView()
+                .environment(updater)
         }
 
         MenuBarExtra {
@@ -30,6 +32,10 @@ struct DitherglowApp: App {
                 NSApp.activate()
             }
             .keyboardShortcut(",")
+            Button("Check for Updates…") {
+                updater.checkForUpdates()
+            }
+            .disabled(!updater.canCheckForUpdates)
             Divider()
             Button("Quit Ditherglow") {
                 NSApp.terminate(nil)

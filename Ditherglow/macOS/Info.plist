@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Sparkle reads the appcast attached to the latest GitHub release. -->
+	<key>SUFeedURL</key>
+	<string>https://github.com/mstrlc/ditherglow/releases/latest/download/appcast.xml</string>
+	<!-- TODO: add SUPublicEDKey (from Sparkle's generate_keys) before the first release. -->
+</dict>
+</plist>
