@@ -21,7 +21,7 @@ xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug
 | `Ditherglow/Shared/DitherglowView.swift` | `TimelineView` at 12 fps feeding the Metal shader via `colorEffect` |
 | `Ditherglow/Shared/Ditherglow.metal` | Single stitchable pass: OKLab blob gradient evaluated once per dither block + 8×8 Bayer dither |
 | `Ditherglow/Shared/Sky.swift` | Daybreak palette: named stops keyed by sun altitude, smoothstep-blended |
-| `Ditherglow/Shared/Sun.swift` | Solar altitude and location from `/usr/share/zoneinfo/zone.tab` (no location permission) |
+| `Ditherglow/Shared/Sun.swift` | Solar altitude and location from the bundled `Shared/zone.tab` (no location permission) |
 | `Ditherglow/Shared/Preferences.swift` | `UserDefaults` keys, defaults and ranges |
 
 `Shared/` is meant to stay platform-agnostic (no AppKit); AppKit-specific code goes in `macOS/`.
