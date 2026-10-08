@@ -46,9 +46,11 @@ Then build and run the **Ditherglow** scheme. The app appears as a sparkle in th
 Ditherglow/
 ├── DitherglowApp.swift          Menu bar extra, preview window, settings scene
 ├── ContentView.swift            Preview window with the time-of-day scrubber
-├── SettingsView.swift           Pixel size and speed sliders
+├── SettingsView.swift           Pixel size, speed, launch at login and updates
 ├── macOS/
-│   └── DesktopWindowController.swift   Borderless windows behind the desktop icons
+│   ├── DesktopWindowController.swift   Borderless windows behind the desktop icons
+│   ├── Updater.swift            Sparkle updates (Check for Updates…)
+│   └── Info.plist               Sparkle feed URL and key
 └── Shared/
     ├── Ditherglow.metal         Gradient + ordered dither shader
     ├── DitherglowView.swift     SwiftUI view driving the shader

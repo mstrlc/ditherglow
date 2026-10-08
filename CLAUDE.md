@@ -9,7 +9,7 @@ xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug
 ```
 
 - macOS 14+ deployment target, Swift 6, Xcode 16+.
-- No package dependencies and no test target.
+- One package dependency, [Sparkle](https://sparkle-project.org) (updates); no test target.
 - The project uses file-system-synchronized groups: new files under `Ditherglow/` are picked up automatically, so don't edit `project.pbxproj` to add them.
 
 ## Architecture
@@ -18,6 +18,7 @@ xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug
 | --- | --- |
 | `Ditherglow/DitherglowApp.swift` | `MenuBarExtra` (no Dock icon), preview `Window`, `Settings` scene |
 | `Ditherglow/macOS/DesktopWindowController.swift` | One borderless window per screen at desktop level, rebuilt on screen changes |
+| `Ditherglow/macOS/Updater.swift` | Sparkle updater wrapper for the menu and Settings; feed URL in `macOS/Info.plist` |
 | `Ditherglow/Shared/DitherglowView.swift` | `TimelineView` at 12 fps feeding the Metal shader via `colorEffect` |
 | `Ditherglow/Shared/Ditherglow.metal` | Single stitchable pass: OKLab blob gradient evaluated once per dither block + 8×8 Bayer dither |
 | `Ditherglow/Shared/Sky.swift` | Daybreak palette: named stops keyed by sun altitude, smoothstep-blended |

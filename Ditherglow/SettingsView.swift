@@ -1,12 +1,13 @@
 import ServiceManagement
 import SwiftUI
 
-/// Settings window: how big the dither pixels are, how fast the blobs drift, and whether to launch at login.
+/// Settings window: how big the dither pixels are, how fast the blobs drift, launching at login and update checks.
 struct SettingsView: View {
     @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
     @AppStorage(Preferences.speedKey) private var speed = Preferences.defaultSpeed
     /// Mirrors `SMAppService` rather than `UserDefaults`, since the user can also change it in System Settings.
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
+    @Environment(Updater.self) private var updater
 
     var body: some View {
         Form {
@@ -14,6 +15,7 @@ struct SettingsView: View {
                 get: { launchAtLogin },
                 set: setLaunchAtLogin
             ))
+            Toggle("Automatically check for updates", isOn: Bindable(updater).automaticallyChecksForUpdates)
             LabeledContent("Pixel size") {
                 Slider(value: $blockSize, in: Preferences.blockSizeRange, step: 1)
                 Text("\(Int(blockSize)) pt")
@@ -54,4 +56,5 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
+        .environment(Updater())
 }
