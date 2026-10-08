@@ -56,3 +56,7 @@ Ditherglow/
     ├── Sun.swift                Solar altitude, sunrise/sunset, time-zone location
     └── Preferences.swift        UserDefaults keys and defaults
 ```
+
+## License
+
+Ditherglow is free software, released under the [GNU General Public License v3.0](LICENSE). You may use, study, modify and redistribute it, provided derivative works stay under the same license.
