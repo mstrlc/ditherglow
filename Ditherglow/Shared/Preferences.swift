@@ -2,6 +2,10 @@ import Foundation
 
 /// `UserDefaults` keys and defaults for the user-tunable look of the sky.
 nonisolated enum Preferences {
+    /// Whether the animated wallpaper is on. Remembered so it comes back on launch.
+    static let wallpaperEnabledKey = "wallpaperEnabled"
+    static let defaultWallpaperEnabled = true
+
     /// Size of one dither pixel, in points.
     static let blockSizeKey = "blockSize"
     static let defaultBlockSize = 4.0

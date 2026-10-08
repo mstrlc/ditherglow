@@ -10,6 +10,7 @@ struct DitherglowApp: App {
         Window("Ditherglow Preview", id: "preview") {
             ContentView()
         }
+        .suppressedAtLaunch()
 
         Settings {
             SettingsView()
@@ -51,5 +52,16 @@ struct DitherglowApp: App {
         }
         dimmed.isTemplate = true
         return dimmed
+    }
+}
+
+private extension Scene {
+    /// A menu bar app shouldn't open a window on launch, but SwiftUI opens the first `Window` scene unless told not to.
+    func suppressedAtLaunch() -> some Scene {
+        if #available(macOS 15, *) {
+            return defaultLaunchBehavior(.suppressed)
+        } else {
+            return self
+        }
     }
 }
