@@ -10,6 +10,7 @@ xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug
 
 - macOS 14+ deployment target, Swift 6, Xcode 16+.
 - One package dependency, [Sparkle](https://sparkle-project.org) (updates); no test target.
+- Releases are ad-hoc signed and hardened runtime is off: with it on, an ad-hoc app can't load the embedded Sparkle.framework (library validation needs a shared Team ID). Turn it back on together with Developer ID signing and notarization.
 - The project uses file-system-synchronized groups: new files under `Ditherglow/` are picked up automatically, so don't edit `project.pbxproj` to add them.
 
 ## Architecture
