@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/icon-dark.svg">
+    <img src="docs/icon.svg" width="128" height="128" alt="Ditherglow app icon: a dithered orb">
+  </picture>
+</p>
+
 # Ditherglow
 
 An animated, dithered wallpaper for macOS that follows the sun. Soft colour blobs drift across your desktop, rendered as chunky dither pixels, and the palette moves with the real sky outside: day, golden hour, sunset glow, blue hour, moonlight, and back again.
@@ -9,7 +16,7 @@ An animated, dithered wallpaper for macOS that follows the sun. Soft colour blob
 - **Lives behind your desktop icons** on every connected display, and rebuilds itself when screens are plugged in or resolutions change.
 - **Daybreak palette** tied to the sun's altitude at your location. Seven named phases (Moonlight, Dusk, Blue Hour, Sunrise & Sunset, Golden Hour, Day, Midday) blend smoothly in OKLab, so mixes stay vivid instead of turning grey.
 - **No location permission needed.** Your approximate latitude and longitude come from the system time zone (via a bundled copy of tzdb's `zone.tab`), and sunrise and sunset are computed locally with almanac formulas.
-- **Menu bar app** with no Dock icon. The sparkle icon dims when the wallpaper is off.
+- **Menu bar app** with no Dock icon. A pixel-art orb, lit while the wallpaper is on and an outline when it is off.
 - **Preview window** with a time-of-day scrubber to see any phase of the sky on demand.
 - **Settings** for pixel size (2–16 pt) and drift speed.
 - **One Metal shader pass** via SwiftUI: the gradient is evaluated once per dither block, which keeps it cheap enough to run all day.
@@ -29,7 +36,7 @@ git clone git@github.com:mstrlc/ditherglow.git
 open ditherglow/Ditherglow.xcodeproj
 ```
 
-Then build and run the **Ditherglow** scheme. The app appears as a sparkle in the menu bar. Turn on **Animated Wallpaper** from there.
+Then build and run the **Ditherglow** scheme. The app appears as a small orb in the menu bar. Turn on **Animated Wallpaper** from there.
 
 ## Usage
 
@@ -49,6 +56,7 @@ Ditherglow/
 ├── SettingsView.swift           Pixel size, speed, launch at login and updates
 ├── macOS/
 │   ├── DesktopWindowController.swift   Borderless windows behind the desktop icons
+│   ├── MenuBarIcon.swift        Pixel-art orb for the menu bar
 │   ├── Updater.swift            Sparkle updates (Check for Updates…)
 │   └── Info.plist               Sparkle feed URL and key
 └── Shared/
