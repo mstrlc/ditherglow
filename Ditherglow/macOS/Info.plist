@@ -5,6 +5,8 @@
 	<!-- Sparkle reads the appcast attached to the latest GitHub release. -->
 	<key>SUFeedURL</key>
 	<string>https://github.com/mstrlc/ditherglow/releases/latest/download/appcast.xml</string>
-	<!-- TODO: add SUPublicEDKey (from Sparkle's generate_keys) before the first release. -->
+	<!-- Public half of the EdDSA key in the maintainer's Keychain (Sparkle's generate_keys). -->
+	<key>SUPublicEDKey</key>
+	<string>PfAMmGCKA8nVW3o4zU7fJTg43oWnjQGn0PZWIS7VuzA=</string>
 </dict>
 </plist>
