@@ -57,9 +57,12 @@ nonisolated enum Sun {
     private static let cache = OSAllocatedUnfairLock<(zone: String, location: Location)?>(initialState: nil)
 
     /// Approximated by the time zone's reference city, so no location permission is needed.
+    /// Reads a bundled copy of tzdb's zone.tab (public domain): the system copy is undocumented
+    /// and may be unreadable from a sandbox or absent on iOS.
     static func location(in zone: TimeZone = .current) -> Location {
         if let hit = cache.withLock({ $0 }), hit.zone == zone.identifier { return hit.location }
-        let table = try? String(contentsOfFile: "/usr/share/zoneinfo/zone.tab", encoding: .utf8)
+        let table = Bundle.main.url(forResource: "zone", withExtension: "tab")
+            .flatMap { try? String(contentsOf: $0, encoding: .utf8) }
         let location = table.flatMap { zoneTabLocation(zone.identifier, in: $0) }
             // Unknown zone (e.g. "UTC"): longitude from the offset, a mid latitude.
             ?? Location(latitude: 45, longitude: Double(zone.secondsFromGMT()) / 240)
