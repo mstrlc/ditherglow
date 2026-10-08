@@ -1,19 +1,22 @@
 #!/usr/bin/env swift
-// Renders the app icon: the "Sunrise & Sunset" sky as a corner-to-corner gradient of large
-// pixels, each colour change drawn with a 4×4 Bayer dither.
+// Renders the app icon: a sunlit orb on the night sky, shaded only with large pixels, each colour
+// change drawn with a 4×4 Bayer dither. Light appearance: the sun in the "Sunrise & Sunset" palette.
+// Dark appearance: the same shape as a moon in the night blues.
 //
-//   swift scripts/render-icon.swift [blocks]   # blocks across the icon, default 24
+//   swift scripts/render-icon.swift [blocks]   # blocks across the icon, default 32
 //
 // Writes Ditherglow/AppIcon.icon for Icon Composer: one stacked SVG layer per colour, glass off,
 // with light, dark and tinted fills. Xcode builds the legacy .icns for older macOS from it.
 
 import Foundation
 
-// The Sunrise & Sunset stop from Sky.swift, top of the sky → horizon.
-let palette: [UInt32] = [0x644D86, 0xAA5C84, 0xDF7D90, 0xE18F6D, 0xEAB989, 0xF0CEB7]
-// Dark appearance: night blues from Sky.swift (Moonlight, Blue Hour, Dusk), silver glow → navy.
-let darkPalette: [UInt32] = [0x6F86B8, 0x426096, 0x273E78, 0x192751, 0x14224A, 0x0B1530]
-let blocks = CommandLine.arguments.dropFirst().compactMap { Int($0) }.first ?? 24
+// Darkest → lightest. The first three are the night sky around the orb (and the orb's unlit edge);
+// the rest light the orb: the Sunrise & Sunset stop from Sky.swift, shadow → highlight.
+let palette: [UInt32] = [0x070B1C, 0x0B1530, 0x14224A, 0x644D86, 0xAA5C84, 0xDF7D90, 0xE18F6D, 0xEAB989, 0xF0CEB7]
+// Dark appearance: a moon. Night blues from Sky.swift (Moonlight, Blue Hour, Dusk) up to a silver highlight.
+let darkPalette: [UInt32] = [0x03050D, 0x070B1C, 0x0B1530, 0x14224A, 0x192751, 0x273E78, 0x426096, 0x6F86B8, 0xA9B6D8]
+let skyCount = 3
+let blocks = CommandLine.arguments.dropFirst().compactMap { Int($0) }.first ?? 32
 
 // MARK: Colour (as in Ditherglow.metal)
 
@@ -50,11 +53,26 @@ func bayer4(_ x: Int, _ y: Int) -> Double {
 /// Ordered dither over the palette index: every block is exactly one palette colour, and each
 /// transition between neighbours becomes a Bayer pattern.
 func paletteIndex(bx: Int, by: Int) -> Int {
-    // Corner to corner, as distance from the top-left corner: top of the sky → horizon.
-    // A straight 45° ramp would line up with Bayer's checker bit (it's (x + y) & 1), so every
-    // diagonal would see only 4 of the 16 thresholds and the patterns streak; arcs cut across it.
-    let t = hypot(Double(bx), Double(by)) / (Double(blocks - 1) * 2.0.squareRoot())
-    let f = t * Double(palette.count - 1)
+    // Block centre relative to the orb, in orb radii (y up).
+    // 0.35 keeps the top, bottom and side rows several blocks wide; just past a row leaves a 2-block nub.
+    let radius = 0.35 * Double(blocks)
+    let dx = (Double(bx) + 0.5 - Double(blocks) / 2) / radius
+    let dy = (Double(blocks) / 2 - Double(by) - 0.5) / radius
+    let r2 = dx * dx + dy * dy
+    let f: Double
+    if r2 < 1 {
+        // Lambert-ish shading from the upper right. The orb only uses its own colours, so even the
+        // unlit side keeps a clean silhouette against the sky.
+        let z = (1 - r2).squareRoot()
+        let lit = min(max(0.55 * dx + 0.55 * dy + 0.62 * z, 0), 1)
+        f = Double(skyCount) + lit * Double(palette.count - skyCount - 1)
+    } else {
+        // Night sky, with a faint glow hugging the orb. Kept to the two darkest blues so it never
+        // touches the orb's colours and blurs the edge.
+        let glow = 1 - min(r2.squareRoot() - 1, 1)
+        f = 0.15 + 0.85 * glow * glow
+        return min(Int(floor(f + bayer4(bx, by))), 1)
+    }
     return min(Int(floor(f + bayer4(bx, by))), palette.count - 1)
 }
 
@@ -107,7 +125,7 @@ let assets = iconDocument.appendingPathComponent("Assets")
 try? FileManager.default.removeItem(at: assets)
 try! FileManager.default.createDirectory(at: assets, withIntermediateDirectories: true)
 
-let layerNames = ["Purple", "Rose", "Pink", "Orange", "Gold", "Cream"]
+let layerNames = ["Night", "Moonlight", "Dusk", "Purple", "Rose", "Pink", "Orange", "Gold", "Cream"]
 var layers: [[String: Any]] = []
 for (i, hex) in palette.enumerated() {
     let name = layerNames[i]

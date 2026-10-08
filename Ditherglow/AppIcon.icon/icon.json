@@ -12,7 +12,7 @@
             {
               "appearance" : "dark",
               "value" : {
-                "solid" : "srgb:0.04314,0.08235,0.18824,1.00000"
+                "solid" : "srgb:0.66275,0.71373,0.84706,1.00000"
               }
             },
             {
@@ -36,13 +36,13 @@
             {
               "appearance" : "dark",
               "value" : {
-                "solid" : "srgb:0.07843,0.13333,0.29020,1.00000"
+                "solid" : "srgb:0.43529,0.52549,0.72157,1.00000"
               }
             },
             {
               "appearance" : "tinted",
               "value" : {
-                "solid" : "srgb:0.89017,0.89017,0.89017,1.00000"
+                "solid" : "srgb:0.93802,0.93802,0.93802,1.00000"
               }
             }
           ],
@@ -60,13 +60,13 @@
             {
               "appearance" : "dark",
               "value" : {
-                "solid" : "srgb:0.09804,0.15294,0.31765,1.00000"
+                "solid" : "srgb:0.25882,0.37647,0.58824,1.00000"
               }
             },
             {
               "appearance" : "tinted",
               "value" : {
-                "solid" : "srgb:0.70866,0.70866,0.70866,1.00000"
+                "solid" : "srgb:0.83560,0.83560,0.83560,1.00000"
               }
             }
           ],
@@ -90,7 +90,7 @@
             {
               "appearance" : "tinted",
               "value" : {
-                "solid" : "srgb:0.66013,0.66013,0.66013,1.00000"
+                "solid" : "srgb:0.80821,0.80821,0.80821,1.00000"
               }
             }
           ],
@@ -108,13 +108,13 @@
             {
               "appearance" : "dark",
               "value" : {
-                "solid" : "srgb:0.25882,0.37647,0.58824,1.00000"
+                "solid" : "srgb:0.09804,0.15294,0.31765,1.00000"
               }
             },
             {
               "appearance" : "tinted",
               "value" : {
-                "solid" : "srgb:0.41487,0.41487,0.41487,1.00000"
+                "solid" : "srgb:0.66981,0.66981,0.66981,1.00000"
               }
             }
           ],
@@ -132,7 +132,79 @@
             {
               "appearance" : "dark",
               "value" : {
-                "solid" : "srgb:0.43529,0.52549,0.72157,1.00000"
+                "solid" : "srgb:0.07843,0.13333,0.29020,1.00000"
+              }
+            },
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "srgb:0.54856,0.54856,0.54856,1.00000"
+              }
+            }
+          ],
+          "glass" : false,
+          "image-name" : "Purple.svg",
+          "name" : "Purple"
+        },
+        {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:0.07843,0.13333,0.29020,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:0.04314,0.08235,0.18824,1.00000"
+              }
+            },
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "srgb:0.32110,0.32110,0.32110,1.00000"
+              }
+            }
+          ],
+          "glass" : false,
+          "image-name" : "Dusk.svg",
+          "name" : "Dusk"
+        },
+        {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:0.04314,0.08235,0.18824,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:0.02745,0.04314,0.10980,1.00000"
+              }
+            },
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "srgb:0.25333,0.25333,0.25333,1.00000"
+              }
+            }
+          ],
+          "glass" : false,
+          "image-name" : "Moonlight.svg",
+          "name" : "Moonlight"
+        },
+        {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:0.02745,0.04314,0.10980,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:0.01176,0.01961,0.05098,1.00000"
               }
             },
             {
@@ -143,8 +215,8 @@
             }
           ],
           "glass" : false,
-          "image-name" : "Purple.svg",
-          "name" : "Purple"
+          "image-name" : "Night.svg",
+          "name" : "Night"
         }
       ],
       "shadow" : {
