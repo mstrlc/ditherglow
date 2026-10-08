@@ -9,10 +9,32 @@ final class DesktopWindowController {
     private(set) var isEnabled = false
     @ObservationIgnored private var windows: [NSWindow] = []
     @ObservationIgnored private var screenObserver: (any NSObjectProtocol)?
+    @ObservationIgnored private var launchObserver: (any NSObjectProtocol)?
+
+    /// Created with the `App`, before `NSApp` has finished launching, so restoring the saved state waits for that.
+    init() {
+        let saved = UserDefaults.standard.object(forKey: Preferences.wallpaperEnabledKey) as? Bool
+        guard saved ?? Preferences.defaultWallpaperEnabled else { return }
+        launchObserver = NotificationCenter.default.addObserver(
+            forName: NSApplication.didFinishLaunchingNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                if let launchObserver = self.launchObserver {
+                    NotificationCenter.default.removeObserver(launchObserver)
+                }
+                self.launchObserver = nil
+                self.setEnabled(true)
+            }
+        }
+    }
 
     func setEnabled(_ enabled: Bool) {
         guard enabled != isEnabled else { return }
         isEnabled = enabled
+        UserDefaults.standard.set(enabled, forKey: Preferences.wallpaperEnabledKey)
         enabled ? start() : stop()
     }
 
