@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 Ditherglow is a macOS menu bar app that draws an animated, dithered sky behind the desktop icons. The palette follows the sun's altitude at the user's (time-zone-derived) location. See [README.md](README.md) for features and usage.
 
