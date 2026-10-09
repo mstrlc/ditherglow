@@ -13,7 +13,9 @@
 
 An animated, dithered wallpaper for macOS that follows the sun. Soft colour blobs drift across your desktop, rendered as chunky dither pixels, and the palette moves with the real sky outside: day, golden hour, sunset glow, blue hour, moonlight, and back again.
 
-[![Ditherglow on a MacBook](docs/macbook.gif)](docs/macbook.mp4)
+<p align="center">
+  <a href="docs/macbook.mp4"><img src="docs/macbook.gif" alt="Ditherglow on a MacBook"></a>
+</p>
 
 ## Features
 
