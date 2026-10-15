@@ -12,6 +12,7 @@
 
 /* Begin PBXFileReference section */
 		D1000000000000000000000A /* Ditherglow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ditherglow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1000000000000000000001E /* Ditherglow.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Ditherglow.saver; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -22,6 +23,21 @@
 			);
 			target = D10000000000000000000003 /* Ditherglow */;
 		};
+		D10000000000000000000020 /* Exceptions for "Ditherglow" folder in "DitherglowSaver" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppIcon.icon,
+				Assets.xcassets,
+				ContentView.swift,
+				DitherglowApp.swift,
+				SettingsView.swift,
+				macOS/DesktopWindowController.swift,
+				macOS/Info.plist,
+				macOS/MenuBarIcon.swift,
+				macOS/Updater.swift,
+			);
+			target = D10000000000000000000024 /* DitherglowSaver */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -29,13 +45,26 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				D1000000000000000000001D /* Exceptions for "Ditherglow" folder in "Ditherglow" target */,
+				D10000000000000000000020 /* Exceptions for "Ditherglow" folder in "DitherglowSaver" target */,
 			);
 			path = Ditherglow;
+			sourceTree = "<group>";
+		};
+		D1000000000000000000001F /* DitherglowSaver */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DitherglowSaver;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D10000000000000000000022 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D1000000000000000000000C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -51,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				D1000000000000000000000B /* Ditherglow */,
+				D1000000000000000000001F /* DitherglowSaver */,
 				D10000000000000000000002 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				D1000000000000000000000A /* Ditherglow.app */,
+				D1000000000000000000001E /* Ditherglow.saver */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -66,6 +97,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D10000000000000000000024 /* DitherglowSaver */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D10000000000000000000025 /* Build configuration list for PBXNativeTarget "DitherglowSaver" */;
+			buildPhases = (
+				D10000000000000000000021 /* Sources */,
+				D10000000000000000000022 /* Frameworks */,
+				D10000000000000000000023 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D1000000000000000000000B /* Ditherglow */,
+				D1000000000000000000001F /* DitherglowSaver */,
+			);
+			name = DitherglowSaver;
+			productName = DitherglowSaver;
+			productReference = D1000000000000000000001E /* Ditherglow.saver */;
+			productType = "com.apple.product-type.bundle";
+		};
 		D10000000000000000000003 /* Ditherglow */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D10000000000000000000007 /* Build configuration list for PBXNativeTarget "Ditherglow" */;
@@ -102,6 +154,9 @@
 					D10000000000000000000003 = {
 						CreatedOnToolsVersion = 27.0;
 					};
+					D10000000000000000000024 = {
+						CreatedOnToolsVersion = 27.0;
+					};
 				};
 			};
 			buildConfigurationList = D10000000000000000000005 /* Build configuration list for PBXProject "Ditherglow" */;
@@ -122,11 +177,19 @@
 			projectRoot = "";
 			targets = (
 				D10000000000000000000003 /* Ditherglow */,
+				D10000000000000000000024 /* DitherglowSaver */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D10000000000000000000023 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D1000000000000000000000E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,6 +200,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D10000000000000000000021 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D1000000000000000000000D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -147,6 +217,56 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		D10000000000000000000026 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = DitherglowSaverView;
+				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = eu.mstrlc.ditherglow.saver;
+				PRODUCT_MODULE_NAME = DitherglowSaver;
+				PRODUCT_NAME = Ditherglow;
+				SKIP_INSTALL = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				WRAPPER_EXTENSION = saver;
+			};
+			name = Debug;
+		};
+		D10000000000000000000027 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = DitherglowSaverView;
+				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = eu.mstrlc.ditherglow.saver;
+				PRODUCT_MODULE_NAME = DitherglowSaver;
+				PRODUCT_NAME = Ditherglow;
+				SKIP_INSTALL = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				WRAPPER_EXTENSION = saver;
+			};
+			name = Release;
+		};
 		D10000000000000000000010 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -268,6 +388,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D10000000000000000000025 /* Build configuration list for PBXNativeTarget "DitherglowSaver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D10000000000000000000026 /* Debug */,
+				D10000000000000000000027 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D10000000000000000000005 /* Build configuration list for PBXProject "Ditherglow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -36,7 +36,7 @@ struct DitherglowView: View {
 
             Rectangle()
                 .visualEffect { content, proxy in
-                    content.colorEffect(ShaderLibrary.ditherglow(
+                    content.colorEffect(ShaderLibrary.bundle(.ditherglow).ditherglow(
                         .float2(proxy.size),
                         .float(time),
                         .float(seed),

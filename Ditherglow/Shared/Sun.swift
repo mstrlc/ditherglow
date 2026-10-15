@@ -61,7 +61,7 @@ nonisolated enum Sun {
     /// and may be unreadable from a sandbox or absent on iOS.
     static func location(in zone: TimeZone = .current) -> Location {
         if let hit = cache.withLock({ $0 }), hit.zone == zone.identifier { return hit.location }
-        let table = Bundle.main.url(forResource: "zone", withExtension: "tab")
+        let table = Bundle.ditherglow.url(forResource: "zone", withExtension: "tab")
             .flatMap { try? String(contentsOf: $0, encoding: .utf8) }
         let location = table.flatMap { zoneTabLocation(zone.identifier, in: $0) }
             // Unknown zone (e.g. "UTC"): longitude from the offset, a mid latitude.
