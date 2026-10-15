@@ -26,6 +26,7 @@ scripts/check.sh   # both, as the git hooks run them
 | `Ditherglow/macOS/DockPresence.swift` | Dock icon and app menu while a window is open; menu bar only otherwise |
 | `Ditherglow/macOS/MenuBarIcon.swift` | 16×16 pixel-art orb template image for the menu bar (lit / outline) |
 | `Ditherglow/macOS/Updater.swift` | Sparkle updater wrapper for the menu and Settings; feed URL in `macOS/Info.plist` |
+| `DitherglowSaver/DitherglowSaverView.swift` | `ScreenSaverView` hosting `DitherglowView` for the `Ditherglow.saver` target |
 | `Ditherglow/Shared/DitherglowView.swift` | `TimelineView` at 12 fps feeding the Metal shader via `colorEffect` |
 | `Ditherglow/Shared/Ditherglow.metal` | Single stitchable pass: OKLab blob gradient evaluated once per dither block + 8×8 Bayer dither |
 | `Ditherglow/Shared/Sky.swift` | Daybreak palette: named stops keyed by sun altitude, smoothstep-blended in OKLCh (never through grey or green) |
@@ -33,6 +34,8 @@ scripts/check.sh   # both, as the git hooks run them
 | `Ditherglow/Shared/Preferences.swift` | `UserDefaults` keys, defaults and ranges |
 
 `Shared/` is meant to stay platform-agnostic (no AppKit); AppKit-specific code goes in `macOS/`.
+
+The `DitherglowSaver` target also syncs the `Ditherglow/` folder, with everything outside `Shared/` listed as a membership exception. A new app-only file outside `Shared/` must be added to that exception list (or it gets compiled into the saver). Load resources via `Bundle.ditherglow`, never `Bundle.main`: in the saver, the main bundle is Apple's `legacyScreenSaver` host.
 
 ## Conventions
 
