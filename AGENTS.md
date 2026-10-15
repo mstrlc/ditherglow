@@ -40,5 +40,7 @@ xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug
 
 ## Git
 
+- `main` holds the stable, released version; `develop` collects work for the next release.
+- One branch per feature or fix, cut from `develop`, with its PR into `develop`. A release merges `develop` into `main`.
 - Branches: `feat/`, `fix/`, `chore/`, `housekeep/` prefixes.
 - Commits: conventional commits, `type(scope): description` (e.g. `feat(settings): add pixel size and speed settings`).
