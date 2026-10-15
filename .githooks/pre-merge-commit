@@ -1,0 +1,3 @@
+#!/bin/bash
+# Runs lint and build before a local merge commit. Skip once with `git merge --no-verify`.
+exec "$(git rev-parse --show-toplevel)/scripts/check.sh"

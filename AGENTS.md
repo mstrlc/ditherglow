@@ -5,10 +5,14 @@ Ditherglow is a macOS menu bar app that draws an animated, dithered sky behind t
 ## Build
 
 ```bash
-xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug build
+scripts/build.sh   # Debug, unsigned, into build/ci — what CI builds
+scripts/lint.sh    # swiftformat --lint + swiftlint --strict; fix formatting with `swiftformat .`
+scripts/check.sh   # both, as the git hooks run them
 ```
 
-- macOS 14+ deployment target, Swift 6, Xcode 16+.
+- macOS 14+ deployment target, Swift 6, Xcode 26+ (CI uses Xcode 26.6 on `macos-26`).
+- CI (`.github/workflows/macos-github-ci.yml`) lints and builds every PR into `develop` or `main`. SwiftFormat and SwiftLint versions are pinned there; keep them in step with `--minversion` in `.swiftformat`.
+- Run `scripts/install-hooks.sh` once per clone: `pre-push` and `pre-merge-commit` then run `scripts/check.sh`. Skip once with `--no-verify`.
 - One package dependency, [Sparkle](https://sparkle-project.org) (updates); no test target.
 - Releases are ad-hoc signed and hardened runtime is off: with it on, an ad-hoc app can't load the embedded Sparkle.framework (library validation needs a shared Team ID). Turn it back on together with Developer ID signing and notarization.
 - The project uses file-system-synchronized groups: new files under `Ditherglow/` are picked up automatically, so don't edit `project.pbxproj` to add them.

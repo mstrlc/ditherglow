@@ -3,7 +3,7 @@ import SwiftUI
 /// Full-bleed animated Daybreak sky. Platform-agnostic, reused by macOS and iOS.
 struct DitherglowView: View {
     /// Fixed moment for previewing the sky; `nil` follows the clock.
-    var dateOverride: Date? = nil
+    var dateOverride: Date?
     /// Animation-time units per real second. The shader's frequencies are ~0.2 rad/unit,
     /// so 0.05 means a blob takes roughly ten minutes to complete one loop.
     var speed: Double = 0.05
