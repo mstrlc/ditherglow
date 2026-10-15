@@ -13,7 +13,8 @@ struct SettingsView: View {
         Form {
             Toggle("Launch at login", isOn: Binding(
                 get: { launchAtLogin },
-                set: setLaunchAtLogin
+                // A closure, not the method itself: Swift 6.3 (Xcode 26) crashes generating code for the method reference.
+                set: { setLaunchAtLogin($0) }
             ))
             Toggle("Automatically check for updates", isOn: Bindable(updater).automaticallyChecksForUpdates)
             LabeledContent("Pixel size") {
