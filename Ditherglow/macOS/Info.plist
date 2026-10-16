@@ -8,5 +8,10 @@
 	<!-- Public half of the EdDSA key in the maintainer's Keychain (Sparkle's generate_keys). -->
 	<key>SUPublicEDKey</key>
 	<string>PfAMmGCKA8nVW3o4zU7fJTg43oWnjQGn0PZWIS7VuzA=</string>
+	<!-- Only asked when the user picks "Current Location" in Settings. -->
+	<key>NSLocationUsageDescription</key>
+	<string>Ditherglow uses your approximate location so the sky's colours follow the sun where you are.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Ditherglow uses your approximate location so the sky's colours follow the sun where you are.</string>
 </dict>
 </plist>
