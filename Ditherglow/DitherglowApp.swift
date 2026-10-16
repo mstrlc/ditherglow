@@ -24,12 +24,10 @@ struct DitherglowApp: App {
                 set: { desktop.setEnabled($0) }
             ))
             Button("Show Preview") {
-                openWindow(id: "preview")
-                NSApp.activate()
+                bringToFront("preview") { openWindow(id: "preview") }
             }
             Button("Settings…") {
-                openSettings()
-                NSApp.activate()
+                bringToFront("com_apple_SwiftUI_Settings_window") { openSettings() }
             }
             .keyboardShortcut(",")
             Button("Check for Updates…") {
@@ -45,6 +43,20 @@ struct DitherglowApp: App {
             Image(nsImage: MenuBarIcon.image(enabled: desktop.isEnabled))
                 .accessibilityLabel("Ditherglow")
         }
+    }
+}
+
+/// A menu bar app isn't active when its menu is used, and macOS's cooperative activation can leave
+/// a window it opens behind the frontmost app. So activate first, then raise the window once it exists.
+/// `identifier` is the prefix of the window's `NSWindow.identifier`, which SwiftUI derives from the scene.
+@MainActor
+private func bringToFront(_ identifier: String, open: () -> Void) {
+    NSApp.activate()
+    open()
+    DispatchQueue.main.async {
+        guard let window = NSApp.windows.first(where: { $0.identifier?.rawValue.hasPrefix(identifier) == true }) else { return }
+        window.orderFrontRegardless()
+        window.makeKey()
     }
 }
 
