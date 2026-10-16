@@ -56,7 +56,14 @@ final class SunTimes {
         let now = Date.now
         let location = Sun.location()
         place = location.name
-        phase = Sky.phase(altitude: Sun.altitude(at: now, location))
+        let altitude = Sun.altitude(at: now, location)
+        let rising = Sun.altitude(at: now + 600, location) > altitude
+        // The palette uses one stop for morning and evening; name the one it is.
+        phase = switch Sky.phase(altitude: altitude) {
+        case "Sunrise & Sunset": rising ? "Sunrise" : "Sunset"
+        case "Dusk" where rising: "Dawn"
+        case let name: name
+        }
 
         let today = Sun.riseAndSet(on: now, location)
         sunrise = today.rise
