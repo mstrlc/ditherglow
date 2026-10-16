@@ -17,6 +17,14 @@ struct DitherglowApp: App {
         .windowResizability(.contentSize)
         .suppressedAtLaunch()
 
+        Window("About Ditherglow", id: "about") {
+            AboutView()
+                .environment(updater)
+        }
+        .windowStyle(.hiddenTitleBar)
+        .windowResizability(.contentSize)
+        .suppressedAtLaunch()
+
         MenuBarExtra {
             SunMenuSection(sun: sunTimes)
             Section {
@@ -30,6 +38,9 @@ struct DitherglowApp: App {
                     bringToFront("main") { openWindow(id: "main") }
                 }
                 .keyboardShortcut(",")
+                Button("About Ditherglow") {
+                    bringToFront("about") { openWindow(id: "about") }
+                }
                 Button("Check for Updates…") {
                     updater.checkForUpdates()
                 }

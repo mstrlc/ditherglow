@@ -65,6 +65,7 @@ scripts/install-hooks.sh
 | --- | --- |
 | Animated Wallpaper | Toggles the animated sky behind your desktop |
 | Preview & Settings… (⌘,) | Scrub through any time of day, above pixel size, speed, launch at login and automatic updates |
+| About Ditherglow | Version, links and credits |
 | Check for Updates… | Checks for a new version with Sparkle |
 | Quit Ditherglow (⌘Q) | Quits and restores your normal wallpaper |
 
