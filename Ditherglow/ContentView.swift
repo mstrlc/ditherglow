@@ -1,7 +1,20 @@
 import SwiftUI
 
-/// Preview window: scrub through today to tune the sky.
+/// The app's one window: the sky preview on top, settings below, so changes show as they're made.
 struct ContentView: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            PreviewView()
+                .frame(height: 240)
+            Divider()
+            SettingsView()
+        }
+        .frame(width: 480)
+    }
+}
+
+/// Scrub through today to tune the sky.
+private struct PreviewView: View {
     @State private var followsClock = true
     @State private var hour = 12.0
     @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
@@ -11,21 +24,32 @@ struct ContentView: View {
             .overlay(alignment: .bottom) {
                 HStack {
                     Toggle("Live", isOn: $followsClock)
-                    Slider(value: $hour, in: 0...24)
-                        .disabled(followsClock)
+                        .toggleStyle(.switch)
+                        .controlSize(.small)
+                    // Shows the current time while live; grabbing it leaves live mode to scrub.
+                    Slider(value: Binding(
+                        get: { followsClock ? Self.hour(of: .now) : hour },
+                        set: {
+                            hour = $0
+                            followsClock = false
+                        }
+                    ), in: 0...24)
                     Text(label)
                         .monospacedDigit()
-                        .frame(width: 210, alignment: .trailing)
+                        .frame(width: 180, alignment: .trailing)
                 }
                 .padding(10)
                 .background(.regularMaterial, in: .rect(cornerRadius: 10))
                 .padding()
             }
-            .frame(minWidth: 560, minHeight: 360)
     }
 
     private var previewDate: Date {
         Calendar.current.startOfDay(for: .now).addingTimeInterval(hour * 3600)
+    }
+
+    private static func hour(of date: Date) -> Double {
+        date.timeIntervalSince(Calendar.current.startOfDay(for: date)) / 3600
     }
 
     private var label: String {
@@ -38,4 +62,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environment(Updater())
+        .environment(CurrentLocation())
 }

@@ -3,7 +3,7 @@ import SwiftUI
 /// Full-bleed animated Daybreak sky. Platform-agnostic, reused by macOS and iOS.
 struct DitherglowView: View {
     /// Fixed moment for previewing the sky; `nil` follows the clock.
-    var dateOverride: Date? = nil
+    var dateOverride: Date?
     /// Animation-time units per real second. The shader's frequencies are ~0.2 rad/unit,
     /// so 0.05 means a blob takes roughly ten minutes to complete one loop.
     var speed: Double = 0.05
@@ -13,6 +13,9 @@ struct DitherglowView: View {
     var blockSize: Double = 4
     /// The sky moves slowly; a low frame rate is plenty and saves power.
     var framesPerSecond: Double = 12
+    /// Stops drawing frames while nobody can see the sky. Animation time follows the clock,
+    /// so on resume the blobs jump to where they'd be rather than picking up where they froze.
+    var isPaused = false
 
     /// Start somewhere random so each launch looks different.
     private static let launchAnchor = Anchor(date: Date(), time: .random(in: 0..<1000))
@@ -30,7 +33,7 @@ struct DitherglowView: View {
         let seed = seed
         let blockSize = Float(blockSize)
 
-        TimelineView(.animation(minimumInterval: 1 / framesPerSecond)) { context in
+        TimelineView(.animation(minimumInterval: 1 / framesPerSecond, paused: isPaused)) { context in
             let colors = Sky.colors(at: dateOverride ?? context.date).flatMap { [$0.x, $0.y, $0.z] }
             let time = Float(anchor.time + context.date.timeIntervalSince(anchor.date) * speed)
 

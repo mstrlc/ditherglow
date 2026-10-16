@@ -5,10 +5,14 @@ Ditherglow is a macOS menu bar app that draws an animated, dithered sky behind t
 ## Build
 
 ```bash
-xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug build
+scripts/build.sh   # Debug, unsigned, into build/ci — what CI builds
+scripts/lint.sh    # swiftformat --lint + swiftlint --strict; fix formatting with `swiftformat .`
+scripts/check.sh   # both, as the git hooks run them
 ```
 
-- macOS 14+ deployment target, Swift 6, Xcode 16+.
+- macOS 14+ deployment target, Swift 6, Xcode 26+ (CI uses Xcode 26.6 on `macos-26`).
+- CI (`.github/workflows/macos-github-ci.yml`) lints and builds every PR into `develop` or `main`. SwiftFormat and SwiftLint versions are pinned there; keep them in step with `--minversion` in `.swiftformat`.
+- Run `scripts/install-hooks.sh` once per clone: `pre-push` and `pre-merge-commit` then run `scripts/check.sh`. Skip once with `--no-verify`.
 - One package dependency, [Sparkle](https://sparkle-project.org) (updates); no test target.
 - Releases are ad-hoc signed and hardened runtime is off: with it on, an ad-hoc app can't load the embedded Sparkle.framework (library validation needs a shared Team ID). Turn it back on together with Developer ID signing and notarization.
 - The project uses file-system-synchronized groups: new files under `Ditherglow/` are picked up automatically, so don't edit `project.pbxproj` to add them.
@@ -17,8 +21,9 @@ xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug
 
 | File | Role |
 | --- | --- |
-| `Ditherglow/DitherglowApp.swift` | `MenuBarExtra` (no Dock icon), preview `Window`, `Settings` scene |
-| `Ditherglow/macOS/DesktopWindowController.swift` | One borderless window per screen at desktop level, rebuilt on screen changes |
+| `Ditherglow/DitherglowApp.swift` | `MenuBarExtra` (no Dock icon), the main `Window` (preview on top, settings below) and the About `Window` |
+| `Ditherglow/macOS/DesktopWindowController.swift` | One borderless window per screen at desktop level, rebuilt on screen changes; pauses a covered screen, and all of them while displays sleep or the session is locked |
+| `Ditherglow/macOS/DockPresence.swift` | Dock icon and app menu while a window is open; menu bar only otherwise |
 | `Ditherglow/macOS/MenuBarIcon.swift` | 16×16 pixel-art orb template image for the menu bar (lit / outline) |
 | `Ditherglow/macOS/Updater.swift` | Sparkle updater wrapper for the menu and Settings; feed URL in `macOS/Info.plist` |
 | `Ditherglow/Shared/DitherglowView.swift` | `TimelineView` at 12 fps feeding the Metal shader via `colorEffect` |
@@ -34,7 +39,7 @@ xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug
 - **Concurrency:** `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`. Pure value/logic types (`Sky`, `Sun`, `Preferences`) are marked `nonisolated`. Values used inside `visualEffect` closures must be copied into locals first, since those run off the main actor.
 - **Palette stops:** every `Sky.Stop` has exactly six colours, and slot *i* in one stop morphs into slot *i* in the next. Keep the order meaningful when editing, and keep stops sorted by altitude.
 - **Shader contract:** colours reach the shader as a flat `[Float]` of sRGB triples (`count / 3` colours). Blending happens in OKLab inside the shader, not in Swift.
-- **Performance:** the wallpaper runs all day. Keep the frame rate low and the shader to one pass; avoid per-pixel work that could be per-block.
+- **Performance:** the wallpaper runs all day. Keep the frame rate low and the shader to one pass; avoid per-pixel work that could be per-block, and never draw frames nobody can see (`DitherglowView.isPaused`).
 - **Settings:** add new tunables to `Preferences` (key, default, range) and read them with `@AppStorage`.
 - Comments explain *why*, as doc comments (`///`) on types and properties. Match the existing terse style.
 
