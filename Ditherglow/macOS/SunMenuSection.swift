@@ -66,7 +66,7 @@ struct SunMenuSection: View {
             sun.goldenHour.map { describe("Golden hour", $0) },
             sun.blueHour.map { describe("Blue hour", $0) },
         ].compactMap(\.self)
-        let place = "The sky's colours follow the sun here. The place comes from your time zone, so no location access is needed."
+        let place = "The sky's colours follow the sun here. Change the place in Settings."
         return bands.isEmpty ? place : "\(bands.joined(separator: ", ")).\n\(place)"
     }
 
@@ -79,8 +79,10 @@ struct SunMenuSection: View {
 
     /// Clock time, with "Tomorrow" when it isn't today (e.g. the next sunrise after sunset).
     private func time(_ date: Date) -> String {
-        let clock = date.formatted(.dateTime.hour().minute())
-        return Calendar.current.isDateInToday(date) ? clock : "Tomorrow \(clock)"
+        var style = Date.FormatStyle.dateTime.hour().minute()
+        style.timeZone = sun.calendar.timeZone
+        let clock = date.formatted(style)
+        return sun.calendar.isDateInToday(date) ? clock : "Tomorrow \(clock)"
     }
 
     /// Hours and minutes, e.g. "2h 41m".
