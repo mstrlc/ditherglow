@@ -4,6 +4,7 @@ import SwiftUI
 struct DitherglowApp: App {
     @State private var desktop = DesktopWindowController()
     @State private var updater = Updater()
+    @State private var sunTimes = SunTimes()
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
 
@@ -19,6 +20,16 @@ struct DitherglowApp: App {
         }
 
         MenuBarExtra {
+            if let sunrise = sunTimes.sunrise {
+                Text("Sunrise \(sunrise, format: .dateTime.hour().minute())")
+            }
+            if let sunset = sunTimes.sunset {
+                Text("Sunset \(sunset, format: .dateTime.hour().minute())")
+            }
+            if sunTimes.sunrise == nil, sunTimes.sunset == nil {
+                Text("No Sunrise or Sunset Today")
+            }
+            Divider()
             Toggle("Animated Wallpaper", isOn: Binding(
                 get: { desktop.isEnabled },
                 set: { desktop.setEnabled($0) }

@@ -36,6 +36,21 @@ nonisolated enum Sun {
         return nil
     }
 
+    /// The day's sunrise and sunset in `calendar`'s time zone; either is nil if it doesn't happen that day.
+    static func riseAndSet(on date: Date, _ location: Location, calendar: Calendar = .current) -> (rise: Date?, set: Date?) {
+        let start = calendar.startOfDay(for: date)
+        guard let end = calendar.date(byAdding: .day, value: 1, to: start) else { return (nil, nil) }
+        var rise: Date?, set: Date?
+        var cursor = start
+        // At most one rise and one set per day outside the polar circles; a third event is tomorrow's.
+        for _ in 0..<2 {
+            guard let event = nextEvent(after: cursor, location), event < end else { break }
+            if isUp(at: event, location) { rise = rise ?? event } else { set = set ?? event }
+            cursor = event
+        }
+        return (rise, set)
+    }
+
     /// Solar altitude in degrees (good to about a minute of time).
     static func altitude(at date: Date, _ location: Location) -> Double {
         let rad = Double.pi / 180
