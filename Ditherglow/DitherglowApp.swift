@@ -4,6 +4,7 @@ import SwiftUI
 struct DitherglowApp: App {
     @State private var desktop = DesktopWindowController()
     @State private var updater = Updater()
+    @State private var sunTimes = SunTimes()
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
 
@@ -19,26 +20,32 @@ struct DitherglowApp: App {
         }
 
         MenuBarExtra {
-            Toggle("Animated Wallpaper", isOn: Binding(
-                get: { desktop.isEnabled },
-                set: { desktop.setEnabled($0) }
-            ))
-            Button("Show Preview") {
-                bringToFront("preview") { openWindow(id: "preview") }
+            SunMenuSection(sun: sunTimes)
+            Section {
+                Toggle("Animated Wallpaper", isOn: Binding(
+                    get: { desktop.isEnabled },
+                    set: { desktop.setEnabled($0) }
+                ))
+                Button("Show Preview") {
+                    bringToFront("preview") { openWindow(id: "preview") }
+                }
             }
-            Button("Settings…") {
-                bringToFront("com_apple_SwiftUI_Settings_window") { openSettings() }
+            Section {
+                Button("Settings…") {
+                    bringToFront("com_apple_SwiftUI_Settings_window") { openSettings() }
+                }
+                .keyboardShortcut(",")
+                Button("Check for Updates…") {
+                    updater.checkForUpdates()
+                }
+                .disabled(!updater.canCheckForUpdates)
             }
-            .keyboardShortcut(",")
-            Button("Check for Updates…") {
-                updater.checkForUpdates()
+            Section {
+                Button("Quit Ditherglow") {
+                    NSApp.terminate(nil)
+                }
+                .keyboardShortcut("q")
             }
-            .disabled(!updater.canCheckForUpdates)
-            Divider()
-            Button("Quit Ditherglow") {
-                NSApp.terminate(nil)
-            }
-            .keyboardShortcut("q")
         } label: {
             Image(nsImage: MenuBarIcon.image(enabled: desktop.isEnabled))
                 .accessibilityLabel("Ditherglow")
