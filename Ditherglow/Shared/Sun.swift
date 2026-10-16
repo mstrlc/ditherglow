@@ -109,6 +109,14 @@ nonisolated enum Sun {
         return location(in: .current)
     }
 
+    /// The time zone to show times in: a chosen city's own, so its sunrise isn't shown as "15:59";
+    /// otherwise the Mac's, which is where the user is.
+    static func timeZone(defaults: UserDefaults = .standard) -> TimeZone {
+        let mode = defaults.string(forKey: Preferences.locationModeKey).flatMap(Preferences.LocationMode.init) ?? Preferences.defaultLocationMode
+        guard mode == .city, let city = defaults.string(forKey: Preferences.cityKey) else { return .current }
+        return TimeZone(identifier: city) ?? .current
+    }
+
     /// Approximated by the time zone's reference city, so no location permission is needed.
     static func location(in zone: TimeZone) -> Location {
         zoneLocation(zone.identifier)

@@ -2,7 +2,8 @@ import AppKit
 import Observation
 
 /// The sun at the place the sky's palette uses, for the menu: today's times, what's next and how long the day is.
-/// Refreshed every minute so the countdown stays current, and at once on wake or a time zone change.
+/// Refreshed every minute so the countdown stays current, and at once on wake, a time zone change
+/// or a new place in Settings.
 @Observable
 final class SunTimes {
     /// Golden or blue hour: under way now until `date`, or next starting at `date`.
@@ -13,6 +14,8 @@ final class SunTimes {
 
     /// Where the times are for, so a surprising time has an explanation.
     private(set) var place: String?
+    /// In the place's time zone, which differs from the Mac's when a far-off city is chosen.
+    private(set) var calendar = Calendar.current
     /// The sky palette's phase right now, e.g. "Golden Hour".
     private(set) var phase = ""
     private(set) var sunrise: Date?
@@ -30,11 +33,11 @@ final class SunTimes {
 
     init() {
         update()
-        observers.append(NotificationCenter.default.addObserver(
-            forName: .NSSystemTimeZoneDidChange, object: nil, queue: .main
-        ) { [weak self] _ in
-            MainActor.assumeIsolated { self?.update() }
-        })
+        for name in [Notification.Name.NSSystemTimeZoneDidChange, UserDefaults.didChangeNotification] {
+            observers.append(NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.update() }
+            })
+        }
         // The ticker's sleep doesn't count time the Mac spent asleep.
         observers.append(NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didWakeNotification, object: nil, queue: .main
@@ -56,6 +59,8 @@ final class SunTimes {
         let now = Date.now
         let location = Sun.location()
         place = location.name
+        calendar = Calendar.current
+        calendar.timeZone = Sun.timeZone()
         let altitude = Sun.altitude(at: now, location)
         let rising = Sun.altitude(at: now + 600, location) > altitude
         // The palette uses one stop for morning and evening; name the one it is.
@@ -65,7 +70,7 @@ final class SunTimes {
         case let name: name
         }
 
-        let today = Sun.riseAndSet(on: now, location)
+        let today = Sun.riseAndSet(on: now, location, calendar: calendar)
         sunrise = today.rise
         sunset = today.set
         next = Sun.nextEvent(after: now, location).map { (!Sun.isUp(at: now, location), $0) }
@@ -74,7 +79,7 @@ final class SunTimes {
         blueHour = band(Sun.blueHour, at: now, location)
 
         dayLength = length(today)
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now).map { Sun.riseAndSet(on: $0, location) }
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: now).map { Sun.riseAndSet(on: $0, location, calendar: calendar) }
         if let dayLength, let before = yesterday.flatMap(length) {
             dayLengthChange = dayLength - before
         } else {
