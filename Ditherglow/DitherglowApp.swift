@@ -34,29 +34,33 @@ struct DitherglowApp: App {
                 }
                 .help("The sky's colours follow the sun here. The place comes from your time zone, so no location access is needed.")
             }
-            Toggle("Animated Wallpaper", isOn: Binding(
-                get: { desktop.isEnabled },
-                set: { desktop.setEnabled($0) }
-            ))
-            Button("Show Preview") {
-                openWindow(id: "preview")
-                NSApp.activate()
+            Section {
+                Toggle("Animated Wallpaper", isOn: Binding(
+                    get: { desktop.isEnabled },
+                    set: { desktop.setEnabled($0) }
+                ))
+                Button("Show Preview") {
+                    openWindow(id: "preview")
+                    NSApp.activate()
+                }
             }
-            Divider()
-            Button("Settings…") {
-                openSettings()
-                NSApp.activate()
+            Section {
+                Button("Settings…") {
+                    openSettings()
+                    NSApp.activate()
+                }
+                .keyboardShortcut(",")
+                Button("Check for Updates…") {
+                    updater.checkForUpdates()
+                }
+                .disabled(!updater.canCheckForUpdates)
             }
-            .keyboardShortcut(",")
-            Button("Check for Updates…") {
-                updater.checkForUpdates()
+            Section {
+                Button("Quit Ditherglow") {
+                    NSApp.terminate(nil)
+                }
+                .keyboardShortcut("q")
             }
-            .disabled(!updater.canCheckForUpdates)
-            Divider()
-            Button("Quit Ditherglow") {
-                NSApp.terminate(nil)
-            }
-            .keyboardShortcut("q")
         } label: {
             Image(nsImage: MenuBarIcon.image(enabled: desktop.isEnabled))
                 .accessibilityLabel("Ditherglow")
