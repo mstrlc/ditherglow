@@ -1,0 +1,24 @@
+# CI runs `swiftlint lint --strict`, so warnings fail the build too.
+included:
+  - Ditherglow
+excluded:
+  - build
+  - .build
+
+disabled_rules:
+  # The solar, colour and pixel maths reads best with the textbook names (d, g, ra, x, y).
+  - identifier_name
+  # `enabled ? start() : stop()` is used deliberately.
+  - void_function_in_ternary
+
+trailing_comma:
+  # SwiftFormat adds trailing commas to multi-line literals; agree with it.
+  mandatory_comma: true
+
+line_length:
+  warning: 160
+  error: 200
+  ignores_comments: true
+
+large_tuple:
+  warning: 3

@@ -1,0 +1,10 @@
+# Matches the existing style; CI runs `swiftformat --lint`, so fix locally with `swiftformat .`.
+--minversion 0.63.1
+--swiftversion 6.0
+--ranges no-space
+--exclude build,.build,DerivedData
+
+# One-line bodies (`guard … else { return }`, `{ $0.close() }`) are the house style.
+--disable wrapFunctionBodies,wrapIfStatementBodies,wrapLoopBodies
+# `///` doc comments are used on private members too, to explain why (see AGENTS.md).
+--disable docComments

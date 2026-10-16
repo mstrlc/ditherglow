@@ -1,0 +1,3 @@
+#!/bin/bash
+# Runs lint and build before anything leaves the machine. Skip once with `git push --no-verify`.
+exec "$(git rev-parse --show-toplevel)/scripts/check.sh"

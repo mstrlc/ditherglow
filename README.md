@@ -35,7 +35,7 @@ Download the latest `Ditherglow-<version>.zip` from [Releases](https://github.co
 ## Requirements
 
 - macOS 14 Sonoma or later
-- Xcode 16 or later to build
+- Xcode 26 or later to build
 
 ## Building
 
@@ -48,6 +48,16 @@ open ditherglow/Ditherglow.xcodeproj
 ```
 
 Then build and run the **Ditherglow** scheme. The app appears as a small orb in the menu bar. Turn on **Animated Wallpaper** from there.
+
+Contributing? Install [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) and [SwiftLint](https://github.com/realm/SwiftLint), then turn on the git hooks, which lint and build before every push:
+
+```bash
+brew install swiftformat swiftlint
+```
+
+```bash
+scripts/install-hooks.sh
+```
 
 ## Usage
 
