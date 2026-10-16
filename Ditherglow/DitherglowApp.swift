@@ -20,20 +20,7 @@ struct DitherglowApp: App {
         }
 
         MenuBarExtra {
-            Section(sunTimes.place.map { "Sun in \($0)" } ?? "Sun Today") {
-                Group {
-                    if let sunrise = sunTimes.sunrise {
-                        Text("Sunrise \(sunrise, format: .dateTime.hour().minute())")
-                    }
-                    if let sunset = sunTimes.sunset {
-                        Text("Sunset \(sunset, format: .dateTime.hour().minute())")
-                    }
-                    if sunTimes.sunrise == nil, sunTimes.sunset == nil {
-                        Text("No Sunrise or Sunset Today")
-                    }
-                }
-                .help("The sky's colours follow the sun here. The place comes from your time zone, so no location access is needed.")
-            }
+            SunMenuSection(sun: sunTimes)
             Section {
                 Toggle("Animated Wallpaper", isOn: Binding(
                     get: { desktop.isEnabled },
