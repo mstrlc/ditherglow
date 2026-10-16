@@ -23,6 +23,7 @@ An animated, dithered wallpaper for macOS that follows the sun. Soft colour blob
 - **Daybreak palette** tied to the sun's altitude at your location. Seven named phases (Moonlight, Dusk, Blue Hour, Sunrise & Sunset, Golden Hour, Day, Midday) blend smoothly in OKLab, so mixes stay vivid instead of turning grey.
 - **No location permission needed.** Your approximate latitude and longitude come from the system time zone (via a bundled copy of tzdb's `zone.tab`), and sunrise and sunset are computed locally with almanac formulas.
 - **Menu bar app** with no Dock icon. A pixel-art orb, lit while the wallpaper is on and an outline when it is off.
+- **Screen saver** (`Ditherglow.saver`) showing the same sky. Build the **DitherglowSaver** target and double-click the product to install it.
 - **Preview window** with a time-of-day scrubber to see any phase of the sky on demand.
 - **Settings** for pixel size (2–16 pt), drift speed and launch at login.
 - **Automatic updates** via [Sparkle](https://sparkle-project.org).
