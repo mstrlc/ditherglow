@@ -42,6 +42,7 @@ struct DitherglowApp: App {
                 openWindow(id: "preview")
                 NSApp.activate()
             }
+            Divider()
             Button("Settings…") {
                 openSettings()
                 NSApp.activate()
