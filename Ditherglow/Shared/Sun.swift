@@ -23,20 +23,47 @@ nonisolated enum Sun {
         altitude(at: date, location) > horizon
     }
 
+    /// Sun's altitude during golden hour, warm low light (a common photographers' definition).
+    static let goldenHour = -4.0...6.0
+    /// Sun's altitude during blue hour, after sunset or before sunrise.
+    static let blueHour = -6.0...(-4.0)
+
     /// Next sunrise or sunset within two days, to about 30 seconds; nil during polar day/night.
     static func nextEvent(after date: Date, _ location: Location) -> Date? {
-        let up = isUp(at: date, location)
+        nextChange(after: date, location) { $0 > horizon }
+    }
+
+    /// When `condition` on the sun's altitude next flips, within two days, to about 30 seconds.
+    /// Five-minute steps still catch the shortest twilight bands, about eight minutes near the equator.
+    static func nextChange(after date: Date, _ location: Location, of condition: (Double) -> Bool) -> Date? {
+        func holds(_ date: Date) -> Bool { condition(altitude(at: date, location)) }
+        let initial = holds(date)
         var lo = date
-        for step in stride(from: 600.0, through: 2 * 86400, by: 600) {
+        for step in stride(from: 300.0, through: 2 * 86400, by: 300) {
             var hi = date + step
-            guard isUp(at: hi, location) != up else { lo = hi; continue }
+            guard holds(hi) != initial else { lo = hi; continue }
             while hi.timeIntervalSince(lo) > 30 {
                 let mid = lo + hi.timeIntervalSince(lo) / 2
-                if isUp(at: mid, location) == up { lo = mid } else { hi = mid }
+                if holds(mid) == initial { lo = mid } else { hi = mid }
             }
             return hi
         }
         return nil
+    }
+
+    /// The day's sunrise and sunset in `calendar`'s time zone; either is nil if it doesn't happen that day.
+    static func riseAndSet(on date: Date, _ location: Location, calendar: Calendar = .current) -> (rise: Date?, set: Date?) {
+        let start = calendar.startOfDay(for: date)
+        guard let end = calendar.date(byAdding: .day, value: 1, to: start) else { return (nil, nil) }
+        var rise: Date?, set: Date?
+        var cursor = start
+        // At most one rise and one set per day outside the polar circles; a third event is tomorrow's.
+        for _ in 0..<2 {
+            guard let event = nextEvent(after: cursor, location), event < end else { break }
+            if isUp(at: event, location) { rise = rise ?? event } else { set = set ?? event }
+            cursor = event
+        }
+        return (rise, set)
     }
 
     /// Solar altitude in degrees (good to about a minute of time).
