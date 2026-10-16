@@ -12,27 +12,30 @@ struct SunMenuSection: View {
                 } else {
                     Text(sun.phase)
                 }
-                if let sunrise = sun.sunrise {
-                    Text("Sunrise \(time(sunrise))")
-                }
-                if let sunset = sun.sunset {
-                    Text("Sunset \(time(sunset))")
-                }
-                if sun.sunrise == nil, sun.sunset == nil {
-                    Text("No Sunrise or Sunset Today")
-                }
-                if let band = sun.goldenHour {
-                    Text(describe("Golden Hour", band))
-                }
-                if let band = sun.blueHour {
-                    Text(describe("Blue Hour", band))
-                }
+                Text(riseAndSet)
                 if let length = sun.dayLength {
                     Text(dayLength(length, change: sun.dayLengthChange))
                 }
             }
             .help("The sky's colours follow the sun here. The place comes from your time zone, so no location access is needed.")
+            // Tucked into a submenu: handy, but not worth two more lines every time the menu opens.
+            if sun.goldenHour != nil || sun.blueHour != nil {
+                Menu("Golden & Blue Hour") {
+                    if let band = sun.goldenHour {
+                        Text(describe("Golden Hour", band))
+                    }
+                    if let band = sun.blueHour {
+                        Text(describe("Blue Hour", band))
+                    }
+                }
+            }
         }
+    }
+
+    /// Both of today's times on one line, e.g. "Sunrise 07:25 · Sunset 18:09".
+    private var riseAndSet: String {
+        let parts = [sun.sunrise.map { "Sunrise \(time($0))" }, sun.sunset.map { "Sunset \(time($0))" }].compactMap(\.self)
+        return parts.isEmpty ? "No Sunrise or Sunset Today" : parts.joined(separator: " · ")
     }
 
     private func describe(_ name: String, _ band: SunTimes.Band) -> String {
