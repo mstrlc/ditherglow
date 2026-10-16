@@ -5,6 +5,8 @@ import Observation
 /// Recomputed when the day or the time zone changes, so the menu never shows yesterday's times.
 @Observable
 final class SunTimes {
+    /// Where the times are for, so a surprising time has an explanation.
+    private(set) var place: String?
     private(set) var sunrise: Date?
     private(set) var sunset: Date?
 
@@ -27,7 +29,9 @@ final class SunTimes {
     }
 
     private func update() {
-        let times = Sun.riseAndSet(on: .now, Sun.location())
+        let location = Sun.location()
+        let times = Sun.riseAndSet(on: .now, location)
+        place = location.name
         sunrise = times.rise
         sunset = times.set
     }

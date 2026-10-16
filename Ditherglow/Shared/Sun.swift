@@ -6,10 +6,13 @@ nonisolated enum Sun {
     struct Location: Equatable, Sendable {
         let latitude: Double
         let longitude: Double
+        /// The time zone's reference city, e.g. "Prague"; nil when the location is only a guess from the offset.
+        let name: String?
 
-        init(latitude: Double, longitude: Double) {
+        init(latitude: Double, longitude: Double, name: String? = nil) {
             self.latitude = latitude
             self.longitude = longitude
+            self.name = name
         }
     }
 
@@ -94,7 +97,9 @@ nonisolated enum Sun {
             guard let split = coords.dropFirst().firstIndex(where: { $0 == "+" || $0 == "-" }),
                   let lat = degrees(coords[..<split], degreeDigits: 2),
                   let lon = degrees(coords[split...], degreeDigits: 3) else { return nil }
-            return Location(latitude: lat, longitude: lon)
+            // The identifier's last component is the city, with underscores for spaces ("America/New_York").
+            let city = identifier.split(separator: "/").last.map { $0.replacingOccurrences(of: "_", with: " ") }
+            return Location(latitude: lat, longitude: lon, name: city)
         }
         return nil
     }

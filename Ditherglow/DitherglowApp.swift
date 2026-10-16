@@ -20,6 +20,9 @@ struct DitherglowApp: App {
         }
 
         MenuBarExtra {
+            if let place = sunTimes.place {
+                Text(place)
+            }
             if let sunrise = sunTimes.sunrise {
                 Text("Sunrise \(sunrise, format: .dateTime.hour().minute())")
             }
