@@ -6,7 +6,7 @@ nonisolated enum Sun {
     struct Location: Equatable, Sendable {
         let latitude: Double
         let longitude: Double
-        /// The time zone's reference city, e.g. "Prague"; nil when the location is only a guess from the offset.
+        /// A place name for the menu, e.g. "Prague"; nil when the location is only a guess from the offset.
         let name: String?
 
         init(latitude: Double, longitude: Double, name: String? = nil) {
@@ -84,20 +84,72 @@ nonisolated enum Sun {
 
     // MARK: Location
 
-    private static let cache = OSAllocatedUnfairLock<(zone: String, location: Location)?>(initialState: nil)
+    private static let cache = OSAllocatedUnfairLock<[String: Location]>(initialState: [:])
+
+    /// Where the sky follows the sun, as chosen in Settings: the time zone's city (the default),
+    /// a city picked from the list, or the last fix from Core Location.
+    /// Cheap enough to call every frame: one `UserDefaults` read and a cached zone.tab lookup.
+    static func location(defaults: UserDefaults = .standard) -> Location {
+        let mode = defaults.string(forKey: Preferences.locationModeKey).flatMap(Preferences.LocationMode.init) ?? Preferences.defaultLocationMode
+        switch mode {
+        case .city:
+            if let city = defaults.string(forKey: Preferences.cityKey), let location = zoneLocation(city) { return location }
+        case .current:
+            // Nothing saved yet (no fix, or access denied): fall back to the time zone until there is.
+            if defaults.object(forKey: Preferences.currentLatitudeKey) != nil {
+                return Location(
+                    latitude: defaults.double(forKey: Preferences.currentLatitudeKey),
+                    longitude: defaults.double(forKey: Preferences.currentLongitudeKey),
+                    name: defaults.string(forKey: Preferences.currentPlaceKey)
+                )
+            }
+        case .timeZone:
+            break
+        }
+        return location(in: .current)
+    }
 
     /// Approximated by the time zone's reference city, so no location permission is needed.
-    /// Reads a bundled copy of tzdb's zone.tab (public domain): the system copy is undocumented
-    /// and may be unreadable from a sandbox or absent on iOS.
-    static func location(in zone: TimeZone = .current) -> Location {
-        if let hit = cache.withLock({ $0 }), hit.zone == zone.identifier { return hit.location }
-        let table = Bundle.main.url(forResource: "zone", withExtension: "tab")
-            .flatMap { try? String(contentsOf: $0, encoding: .utf8) }
-        let location = table.flatMap { zoneTabLocation(zone.identifier, in: $0) }
+    static func location(in zone: TimeZone) -> Location {
+        zoneLocation(zone.identifier)
             // Unknown zone (e.g. "UTC"): longitude from the offset, a mid latitude.
             ?? Location(latitude: 45, longitude: Double(zone.secondsFromGMT()) / 240)
-        cache.withLock { $0 = (zone.identifier, location) }
+    }
+
+    /// A zone.tab identifier's reference city, e.g. "Europe/Prague"; cached, since it's read every frame.
+    private static func zoneLocation(_ identifier: String) -> Location? {
+        if let hit = cache.withLock({ $0[identifier] }) { return hit }
+        guard let location = zoneTab.flatMap({ zoneTabLocation(identifier, in: $0) }) else { return nil }
+        cache.withLock { $0[identifier] = location }
         return location
+    }
+
+    /// A bundled copy of tzdb's zone.tab (public domain): the system copy is undocumented
+    /// and may be unreadable from a sandbox or absent on iOS.
+    private static let zoneTab = Bundle.main.url(forResource: "zone", withExtension: "tab")
+        .flatMap { try? String(contentsOf: $0, encoding: .utf8) }
+
+    /// A city to pick in Settings: one row of zone.tab.
+    struct City: Identifiable, Hashable, Sendable {
+        /// The zone identifier, e.g. "America/Los_Angeles".
+        let id: String
+        let name: String
+        let countryCode: String
+        /// The identifier's first component, e.g. "America", for grouping the list.
+        var region: String { String(id.prefix { $0 != "/" }) }
+    }
+
+    /// Every city in zone.tab, sorted by name.
+    static let cities: [City] = (zoneTab ?? "").split(separator: "\n").compactMap { line in
+        let fields = line.split(separator: "\t")
+        guard !line.hasPrefix("#"), fields.count >= 3 else { return nil }
+        let id = String(fields[2])
+        return City(id: id, name: cityName(id), countryCode: String(fields[0]))
+    }.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+
+    /// The identifier's last component is the city, with underscores for spaces ("America/New_York").
+    static func cityName(_ identifier: String) -> String {
+        (identifier.split(separator: "/").last.map(String.init) ?? identifier).replacingOccurrences(of: "_", with: " ")
     }
 
     /// zone.tab rows look like `CZ  +5005+01426  Europe/Prague`, as ±DDMM[SS]±DDDMM[SS].
@@ -109,9 +161,7 @@ nonisolated enum Sun {
             guard let split = coords.dropFirst().firstIndex(where: { $0 == "+" || $0 == "-" }),
                   let lat = degrees(coords[..<split], degreeDigits: 2),
                   let lon = degrees(coords[split...], degreeDigits: 3) else { return nil }
-            // The identifier's last component is the city, with underscores for spaces ("America/New_York").
-            let city = identifier.split(separator: "/").last.map { $0.replacingOccurrences(of: "_", with: " ") }
-            return Location(latitude: lat, longitude: lon, name: city)
+            return Location(latitude: lat, longitude: lon, name: cityName(identifier))
         }
         return nil
     }

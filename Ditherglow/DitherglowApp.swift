@@ -5,6 +5,7 @@ struct DitherglowApp: App {
     @State private var desktop = DesktopWindowController()
     @State private var updater = Updater()
     @State private var sunTimes = SunTimes()
+    @State private var currentLocation = CurrentLocation()
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
 
@@ -17,6 +18,7 @@ struct DitherglowApp: App {
         Settings {
             SettingsView()
                 .environment(updater)
+                .environment(currentLocation)
         }
 
         MenuBarExtra {
