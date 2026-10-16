@@ -21,7 +21,7 @@ scripts/check.sh   # both, as the git hooks run them
 
 | File | Role |
 | --- | --- |
-| `Ditherglow/DitherglowApp.swift` | `MenuBarExtra` (no Dock icon), preview `Window`, `Settings` scene |
+| `Ditherglow/DitherglowApp.swift` | `MenuBarExtra` (no Dock icon) and the one `Window`: preview on top, settings below |
 | `Ditherglow/macOS/DesktopWindowController.swift` | One borderless window per screen at desktop level, rebuilt on screen changes; pauses a covered screen, and all of them while displays sleep or the session is locked |
 | `Ditherglow/macOS/MenuBarIcon.swift` | 16×16 pixel-art orb template image for the menu bar (lit / outline) |
 | `Ditherglow/macOS/Updater.swift` | Sparkle updater wrapper for the menu and Settings; feed URL in `macOS/Info.plist` |

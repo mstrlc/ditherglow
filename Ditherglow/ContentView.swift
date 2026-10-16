@@ -1,7 +1,20 @@
 import SwiftUI
 
-/// Preview window: scrub through today to tune the sky.
+/// The app's one window: the sky preview on top, settings below, so changes show as they're made.
 struct ContentView: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            PreviewView()
+                .frame(height: 240)
+            Divider()
+            SettingsView()
+        }
+        .frame(width: 480)
+    }
+}
+
+/// Scrub through today to tune the sky.
+private struct PreviewView: View {
     @State private var followsClock = true
     @State private var hour = 12.0
     @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
@@ -15,13 +28,12 @@ struct ContentView: View {
                         .disabled(followsClock)
                     Text(label)
                         .monospacedDigit()
-                        .frame(width: 210, alignment: .trailing)
+                        .frame(width: 180, alignment: .trailing)
                 }
                 .padding(10)
                 .background(.regularMaterial, in: .rect(cornerRadius: 10))
                 .padding()
             }
-            .frame(minWidth: 560, minHeight: 360)
     }
 
     private var previewDate: Date {
@@ -38,4 +50,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environment(Updater())
+        .environment(CurrentLocation())
 }

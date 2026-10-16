@@ -7,19 +7,15 @@ struct DitherglowApp: App {
     @State private var sunTimes = SunTimes()
     @State private var currentLocation = CurrentLocation()
     @Environment(\.openWindow) private var openWindow
-    @Environment(\.openSettings) private var openSettings
 
     var body: some Scene {
-        Window("Ditherglow Preview", id: "preview") {
+        Window("Ditherglow", id: "main") {
             ContentView()
-        }
-        .suppressedAtLaunch()
-
-        Settings {
-            SettingsView()
                 .environment(updater)
                 .environment(currentLocation)
         }
+        .windowResizability(.contentSize)
+        .suppressedAtLaunch()
 
         MenuBarExtra {
             SunMenuSection(sun: sunTimes)
@@ -28,13 +24,10 @@ struct DitherglowApp: App {
                     get: { desktop.isEnabled },
                     set: { desktop.setEnabled($0) }
                 ))
-                Button("Show Preview") {
-                    bringToFront("preview") { openWindow(id: "preview") }
-                }
             }
             Section {
-                Button("Settings…") {
-                    bringToFront("com_apple_SwiftUI_Settings_window") { openSettings() }
+                Button("Preview & Settings…") {
+                    bringToFront("main") { openWindow(id: "main") }
                 }
                 .keyboardShortcut(",")
                 Button("Check for Updates…") {
