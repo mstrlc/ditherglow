@@ -26,7 +26,7 @@ An animated, dithered wallpaper for macOS that follows the sun. Soft colour blob
 - **Preview window** with a time-of-day scrubber to see any phase of the sky on demand.
 - **Settings** for pixel size (2–16 pt), drift speed and launch at login.
 - **Automatic updates** via [Sparkle](https://sparkle-project.org).
-- **One Metal shader pass** via SwiftUI: the gradient is evaluated once per dither block, which keeps it cheap enough to run all day.
+- **One Metal shader pass** via SwiftUI: the gradient is evaluated once per dither block, which keeps it cheap enough to run all day. It stops drawing on a screen that is fully covered, such as by a fullscreen app, and everywhere while the displays sleep or the Mac is locked.
 
 ## Install
 
