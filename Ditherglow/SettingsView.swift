@@ -2,7 +2,7 @@ import CoreLocation
 import ServiceManagement
 import SwiftUI
 
-/// Settings window: where the sun is followed, how big the dither pixels are, how fast the blobs drift,
+/// Settings, under the preview: where the sun is followed, how big the dither pixels are, how fast the blobs drift,
 /// launching at login and update checks.
 struct SettingsView: View {
     @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
@@ -18,57 +18,103 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
-            Toggle("Launch at login", isOn: Binding(
-                get: { launchAtLogin },
-                // A closure, not the method itself: Swift 6.3 (Xcode 26) crashes generating code for the method reference.
-                set: { setLaunchAtLogin($0) }
-            ))
-            Toggle("Automatically check for updates", isOn: Bindable(updater).automaticallyChecksForUpdates)
-            Picker("Follow the sun in", selection: $locationMode) {
-                Text("Time Zone (\(Sun.location(in: .current).name ?? TimeZone.current.identifier))").tag(Preferences.LocationMode.timeZone)
-                Text("A City").tag(Preferences.LocationMode.city)
-                Text("Current Location").tag(Preferences.LocationMode.current)
+            Section {
+                LabeledContent {
+                    HStack {
+                        Slider(value: $blockSize, in: Preferences.blockSizeRange, step: 1)
+                        Text("\(Int(blockSize)) pt")
+                            .monospacedDigit()
+                            .foregroundStyle(.secondary)
+                            .frame(width: 40, alignment: .trailing)
+                    }
+                    .frame(width: 220)
+                } label: {
+                    SettingLabel("Pixel size", systemImage: "square.grid.3x3.fill", color: .purple)
+                }
+                LabeledContent {
+                    HStack {
+                        Slider(value: $speed, in: Preferences.speedRange)
+                        Text(Preferences.loopDuration(speed: speed), format: .units(allowed: [.minutes, .seconds], width: .narrow, maximumUnitCount: 1))
+                            .monospacedDigit()
+                            .foregroundStyle(.secondary)
+                            .frame(width: 40, alignment: .trailing)
+                    }
+                    .frame(width: 220)
+                } label: {
+                    SettingLabel("Speed", systemImage: "hare.fill", color: .orange)
+                }
+                .help("Roughly how long one blob takes to loop around")
+            } header: {
+                Text("Appearance")
+            } footer: {
+                HStack {
+                    Spacer()
+                    Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
+                        blockSize = Preferences.defaultBlockSize
+                        speed = Preferences.defaultSpeed
+                    }
+                    .disabled(blockSize == Preferences.defaultBlockSize && speed == Preferences.defaultSpeed)
+                }
             }
-            .help("Your time zone's city needs no permission, but can be hours of sunlight off in a wide time zone.")
-            switch locationMode {
-            case .timeZone:
-                EmptyView()
-            case .city:
-                Picker("City", selection: $city) {
-                    ForEach(Self.regions, id: \.name) { region in
-                        Section(region.name) {
-                            ForEach(region.cities) { city in
-                                Text("\(city.name), \(Locale.current.localizedString(forRegionCode: city.countryCode) ?? city.countryCode)")
-                                    .tag(city.id)
+
+            Section {
+                Picker(selection: $locationMode) {
+                    Text("Time Zone (\(Sun.location(in: .current).name ?? TimeZone.current.identifier))").tag(Preferences.LocationMode.timeZone)
+                    Text("A City").tag(Preferences.LocationMode.city)
+                    Text("Current Location").tag(Preferences.LocationMode.current)
+                } label: {
+                    SettingLabel("Follow the sun in", systemImage: "sun.horizon.fill", color: .yellow)
+                }
+                switch locationMode {
+                case .timeZone:
+                    EmptyView()
+                case .city:
+                    Picker(selection: $city) {
+                        ForEach(Self.regions, id: \.name) { region in
+                            Section(region.name) {
+                                ForEach(region.cities) { city in
+                                    Text("\(city.name), \(Locale.current.localizedString(forRegionCode: city.countryCode) ?? city.countryCode)")
+                                        .tag(city.id)
+                                }
                             }
                         }
+                    } label: {
+                        SettingLabel("City", systemImage: "building.2.fill", color: .blue)
+                    }
+                case .current:
+                    LabeledContent {
+                        currentLocationStatus
+                    } label: {
+                        SettingLabel("Location", systemImage: "location.fill", color: .blue)
                     }
                 }
-            case .current:
-                LabeledContent("Location") {
-                    currentLocationStatus
+            } header: {
+                Text("Sun")
+            } footer: {
+                if locationMode == .timeZone {
+                    Text("Your time zone's city needs no permission, but can be hours of sunlight off in a wide time zone.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                 }
             }
-            LabeledContent("Pixel size") {
-                Slider(value: $blockSize, in: Preferences.blockSizeRange, step: 1)
-                Text("\(Int(blockSize)) pt")
-                    .monospacedDigit()
-                    .frame(width: 70, alignment: .trailing)
-            }
-            LabeledContent("Speed") {
-                Slider(value: $speed, in: Preferences.speedRange)
-                Text(Preferences.loopDuration(speed: speed), format: .units(allowed: [.minutes, .seconds], width: .narrow, maximumUnitCount: 1))
-                    .monospacedDigit()
-                    .frame(width: 70, alignment: .trailing)
-            }
-            .help("Roughly how long one blob takes to loop around")
-            Button("Restore Defaults") {
-                blockSize = Preferences.defaultBlockSize
-                speed = Preferences.defaultSpeed
+
+            Section("General") {
+                Toggle(isOn: Binding(
+                    get: { launchAtLogin },
+                    // A closure, not the method itself: Swift 6.3 (Xcode 26) crashes generating code for the method reference.
+                    set: { setLaunchAtLogin($0) }
+                )) {
+                    SettingLabel("Launch at login", systemImage: "power", color: .green)
+                }
+                Toggle(isOn: Bindable(updater).automaticallyChecksForUpdates) {
+                    SettingLabel("Automatically check for updates", systemImage: "arrow.triangle.2.circlepath", color: .gray)
+                }
             }
         }
-        .padding(20)
-        .frame(width: 420)
+        .formStyle(.grouped)
+        // Sized to its sections rather than scrolling: the window fits its content.
+        .scrollDisabled(true)
+        .fixedSize(horizontal: false, vertical: true)
         .onAppear { launchAtLogin = SMAppService.mainApp.status == .enabled }
     }
 
@@ -111,6 +157,31 @@ struct SettingsView: View {
         }
         // Re-read rather than trust `enabled`: registration can fail or need approval in System Settings.
         launchAtLogin = SMAppService.mainApp.status == .enabled
+    }
+}
+
+/// A row title with its symbol on a coloured tile, as System Settings draws them.
+private struct SettingLabel: View {
+    let title: String
+    let systemImage: String
+    let color: Color
+
+    init(_ title: String, systemImage: String, color: Color) {
+        self.title = title
+        self.systemImage = systemImage
+        self.color = color
+    }
+
+    var body: some View {
+        Label {
+            Text(title)
+        } icon: {
+            Image(systemName: systemImage)
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 20, height: 20)
+                .background(color.gradient, in: .rect(cornerRadius: 5))
+        }
     }
 }
 
