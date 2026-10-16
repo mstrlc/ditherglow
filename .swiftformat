@@ -5,6 +5,6 @@
 --exclude build,.build,DerivedData
 
 # One-line bodies (`guard … else { return }`, `{ $0.close() }`) are the house style.
---disable wrapFunctionBodies,wrapIfStatementBodies,wrapLoopBodies
+--disable wrapFunctionBodies,wrapIfStatementBodies,wrapLoopBodies,wrapPropertyBodies
 # `///` doc comments are used on private members too, to explain why (see AGENTS.md).
 --disable docComments
