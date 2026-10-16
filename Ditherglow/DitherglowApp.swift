@@ -13,13 +13,33 @@ struct DitherglowApp: App {
             ContentView()
                 .environment(updater)
                 .environment(currentLocation)
+                .showsInDock()
         }
         .windowResizability(.contentSize)
         .suppressedAtLaunch()
+        .commands {
+            // The app menu shows while a window is open; point its standard items at Ditherglow's own windows.
+            CommandGroup(replacing: .appInfo) {
+                Button("About Ditherglow") {
+                    bringToFront("about") { openWindow(id: "about") }
+                }
+            }
+            CommandGroup(replacing: .appSettings) {
+                Button("Settings…") {
+                    bringToFront("main") { openWindow(id: "main") }
+                }
+                .keyboardShortcut(",")
+                Button("Check for Updates…") {
+                    updater.checkForUpdates()
+                }
+                .disabled(!updater.canCheckForUpdates)
+            }
+        }
 
         Window("About Ditherglow", id: "about") {
             AboutView()
                 .environment(updater)
+                .showsInDock()
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
