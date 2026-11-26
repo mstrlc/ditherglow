@@ -92,6 +92,10 @@ scripts/
 └── render-icon.swift            Renders the dithered orb app icon
 ```
 
+## Privacy
+
+Ditherglow collects no personal data. Once a day it checks `ditherglow.app/appcast.xml` for updates (turn this off in **Settings**). The site counts these checks by app version and day to see how many copies are in use. It stores no identifier and no IP address, and the app sends nothing else. The site runs on Cloudflare, which processes requests to it.
+
 ## License
 
 Ditherglow is free software, released under the [GNU General Public License v3.0](LICENSE). You may use, study, modify and redistribute it, provided derivative works stay under the same license.
