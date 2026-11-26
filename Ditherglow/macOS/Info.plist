@@ -5,6 +5,9 @@
 	<!-- ditherglow.app proxies the appcast attached to the latest GitHub release and counts checks. -->
 	<key>SUFeedURL</key>
 	<string>https://ditherglow.app/appcast.xml</string>
+	<!-- Check daily without Sparkle's second-launch prompt; still switchable in Settings. -->
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
 	<!-- Public half of the EdDSA key in the maintainer's Keychain (Sparkle's generate_keys). -->
 	<key>SUPublicEDKey</key>
 	<string>PfAMmGCKA8nVW3o4zU7fJTg43oWnjQGn0PZWIS7VuzA=</string>
