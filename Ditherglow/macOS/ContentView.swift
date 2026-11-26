@@ -28,13 +28,13 @@ private struct PreviewView: View {
                         .controlSize(.small)
                     // Shows the current time while live; grabbing it leaves live mode to scrub.
                     Slider(value: Binding(
-                        get: { followsClock ? Self.hour(of: .now) : hour },
+                        get: { followsClock ? TimeOfDay.hour(of: .now) : hour },
                         set: {
                             hour = $0
                             followsClock = false
                         }
                     ), in: 0...24)
-                    Text(label)
+                    Text(TimeOfDay.summary(of: followsClock ? .now : previewDate))
                         .monospacedDigit()
                         .frame(width: 180, alignment: .trailing)
                 }
@@ -45,18 +45,7 @@ private struct PreviewView: View {
     }
 
     private var previewDate: Date {
-        Calendar.current.startOfDay(for: .now).addingTimeInterval(hour * 3600)
-    }
-
-    private static func hour(of date: Date) -> Double {
-        date.timeIntervalSince(Calendar.current.startOfDay(for: date)) / 3600
-    }
-
-    private var label: String {
-        let date = followsClock ? Date.now : previewDate
-        let altitude = Sky.altitude(at: date)
-        return "\(date.formatted(date: .omitted, time: .shortened)) · \(Sky.phase(altitude: altitude)) "
-            + String(format: "%.0f°", altitude)
+        TimeOfDay.date(hour: hour)
     }
 }
 
