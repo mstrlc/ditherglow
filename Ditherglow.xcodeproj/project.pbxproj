@@ -12,25 +12,36 @@
 
 /* Begin PBXFileReference section */
 		D1000000000000000000000A /* Ditherglow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ditherglow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1000000000000000000002A /* Ditherglow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ditherglow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D1000000000000000000001D /* Exceptions for "Ditherglow" folder in "Ditherglow" target */ = {
+		D1000000000000000000001D /* Exceptions for "macOS" folder in "Ditherglow macOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				macOS/Info.plist,
+				Info.plist,
 			);
-			target = D10000000000000000000003 /* Ditherglow */;
+			target = D10000000000000000000003 /* Ditherglow macOS */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D1000000000000000000000B /* Ditherglow */ = {
+		D1000000000000000000003A /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		D1000000000000000000003B /* macOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				D1000000000000000000001D /* Exceptions for "Ditherglow" folder in "Ditherglow" target */,
+				D1000000000000000000001D /* Exceptions for "macOS" folder in "Ditherglow macOS" target */,
 			);
-			path = Ditherglow;
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		D1000000000000000000003C /* iOS */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -41,6 +52,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1000000000000000000001C /* Sparkle in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1000000000000000000002C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,16 +77,27 @@
 			isa = PBXGroup;
 			children = (
 				D1000000000000000000000A /* Ditherglow.app */,
+				D1000000000000000000002A /* Ditherglow.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D1000000000000000000000B /* Ditherglow */ = {
+			isa = PBXGroup;
+			children = (
+				D1000000000000000000003A /* Shared */,
+				D1000000000000000000003B /* macOS */,
+				D1000000000000000000003C /* iOS */,
+			);
+			path = Ditherglow;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D10000000000000000000003 /* Ditherglow */ = {
+		D10000000000000000000003 /* Ditherglow macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D10000000000000000000007 /* Build configuration list for PBXNativeTarget "Ditherglow" */;
+			buildConfigurationList = D10000000000000000000007 /* Build configuration list for PBXNativeTarget "Ditherglow macOS" */;
 			buildPhases = (
 				D1000000000000000000000D /* Sources */,
 				D1000000000000000000000C /* Frameworks */,
@@ -79,14 +108,38 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				D1000000000000000000000B /* Ditherglow */,
+				D1000000000000000000003A /* Shared */,
+				D1000000000000000000003B /* macOS */,
 			);
-			name = Ditherglow;
+			name = "Ditherglow macOS";
 			packageProductDependencies = (
 				D1000000000000000000001B /* Sparkle */,
 			);
 			productName = Ditherglow;
 			productReference = D1000000000000000000000A /* Ditherglow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D10000000000000000000023 /* Ditherglow iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D10000000000000000000027 /* Build configuration list for PBXNativeTarget "Ditherglow iOS" */;
+			buildPhases = (
+				D1000000000000000000002D /* Sources */,
+				D1000000000000000000002C /* Frameworks */,
+				D1000000000000000000002E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D1000000000000000000003A /* Shared */,
+				D1000000000000000000003C /* iOS */,
+			);
+			name = "Ditherglow iOS";
+			packageProductDependencies = (
+			);
+			productName = Ditherglow;
+			productReference = D1000000000000000000002A /* Ditherglow.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -100,6 +153,9 @@
 				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					D10000000000000000000003 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					D10000000000000000000023 = {
 						CreatedOnToolsVersion = 27.0;
 					};
 				};
@@ -121,7 +177,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D10000000000000000000003 /* Ditherglow */,
+				D10000000000000000000003 /* Ditherglow macOS */,
+				D10000000000000000000023 /* Ditherglow iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -134,10 +191,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D1000000000000000000002E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D1000000000000000000000D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1000000000000000000002D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -227,7 +298,7 @@
 				);
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = eu.mstrlc.ditherglow;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Ditherglow;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -256,12 +327,86 @@
 				);
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = eu.mstrlc.ditherglow;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Ditherglow;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		D10000000000000000000032 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J6P292P4C5;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Ditherglow;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Ditherglow saves the sky to Photos, as a picture or a Live Photo, for you to use as a wallpaper.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = eu.mstrlc.ditherglow;
+				PRODUCT_NAME = Ditherglow;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D10000000000000000000033 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J6P292P4C5;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Ditherglow;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Ditherglow saves the sky to Photos, as a picture or a Live Photo, for you to use as a wallpaper.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = eu.mstrlc.ditherglow;
+				PRODUCT_NAME = Ditherglow;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -277,11 +422,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D10000000000000000000007 /* Build configuration list for PBXNativeTarget "Ditherglow" */ = {
+		D10000000000000000000007 /* Build configuration list for PBXNativeTarget "Ditherglow macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D10000000000000000000012 /* Debug */,
 				D10000000000000000000013 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D10000000000000000000027 /* Build configuration list for PBXNativeTarget "Ditherglow iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D10000000000000000000032 /* Debug */,
+				D10000000000000000000033 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
