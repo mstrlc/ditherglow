@@ -5,7 +5,7 @@
 //
 //   swift scripts/render-icon.swift [blocks]   # blocks across the icon, default 32
 //
-// Writes Ditherglow/AppIcon.icon for Icon Composer: one stacked SVG layer per colour, glass off,
+// Writes Ditherglow/Shared/AppIcon.icon for Icon Composer: one stacked SVG layer per colour, glass off,
 // with light, dark and tinted fills. Xcode builds the legacy .icns for older macOS from it.
 
 import Foundation
@@ -120,7 +120,7 @@ func tintedString(_ hex: UInt32) -> String {
     return String(format: "srgb:%.5f,%.5f,%.5f,1.00000", grey, grey, grey)
 }
 
-let iconDocument = root.appendingPathComponent("Ditherglow/AppIcon.icon")
+let iconDocument = root.appendingPathComponent("Ditherglow/Shared/AppIcon.icon")
 let assets = iconDocument.appendingPathComponent("Assets")
 try? FileManager.default.removeItem(at: assets)
 try! FileManager.default.createDirectory(at: assets, withIntermediateDirectories: true)

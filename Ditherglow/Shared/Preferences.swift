@@ -38,6 +38,27 @@ nonisolated enum Preferences {
     static let currentLongitudeKey = "currentLongitude"
     static let currentPlaceKey = "currentPlace"
 
+    /// iOS: whether the ambient screen shows the time over the sky.
+    static let showsClockKey = "showsClock"
+    static let defaultShowsClock = true
+
+    /// iOS: when the ambient screen stops the phone from auto-locking.
+    enum KeepAwake: String, CaseIterable, Sendable {
+        case never
+        /// Like StandBy: on the charger the sky can stay up all night without draining the battery.
+        case whileCharging
+        case always
+    }
+
+    static let keepAwakeKey = "keepAwake"
+    static let defaultKeepAwake = KeepAwake.whileCharging
+
+    /// iOS: the screen in portrait, in points, and its pixels per point, saved whenever the app runs. Wallpapers are
+    /// rendered to fit it, including from Shortcuts, which can run without a screen to ask.
+    static let screenWidthKey = "screenWidth"
+    static let screenHeightKey = "screenHeight"
+    static let screenScaleKey = "screenScale"
+
     /// Roughly how long a blob takes to complete one loop at `speed`.
     /// The shader's path frequencies are ~0.2 rad per time unit.
     static func loopDuration(speed: Double) -> Duration {
