@@ -134,7 +134,7 @@ nonisolated enum Sun {
 
     /// A bundled copy of tzdb's zone.tab (public domain): the system copy is undocumented
     /// and may be unreadable from a sandbox or absent on iOS.
-    private static let zoneTab = Bundle.main.url(forResource: "zone", withExtension: "tab")
+    private static let zoneTab = Bundle.ditherglow.url(forResource: "zone", withExtension: "tab")
         .flatMap { try? String(contentsOf: $0, encoding: .utf8) }
 
     /// A city to pick in Settings: one row of zone.tab.
