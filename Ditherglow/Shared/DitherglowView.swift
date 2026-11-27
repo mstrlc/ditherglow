@@ -4,6 +4,8 @@ import SwiftUI
 struct DitherglowView: View {
     /// Fixed moment for previewing the sky; `nil` follows the clock.
     var dateOverride: Date?
+    /// Where the sky follows the sun; `nil` reads it from Settings every frame.
+    var location: Sun.Location?
     /// Animation-time units per real second. The shader's frequencies are ~0.2 rad/unit,
     /// so 0.05 means a blob takes roughly ten minutes to complete one loop.
     var speed: Double = 0.05
@@ -36,7 +38,7 @@ struct DitherglowView: View {
         let blockSize = Float(blockSize)
 
         TimelineView(.animation(minimumInterval: 1 / framesPerSecond, paused: isPaused)) { context in
-            let colors = Sky.colors(at: dateOverride ?? context.date).flatMap { [$0.x, $0.y, $0.z] }
+            let colors = Sky.colors(at: dateOverride ?? context.date, location: location).flatMap { [$0.x, $0.y, $0.z] }
             let time = Float(anchor.time + context.date.timeIntervalSince(anchor.date) * speed)
 
             Rectangle()

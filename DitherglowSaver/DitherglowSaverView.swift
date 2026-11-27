@@ -1,9 +1,8 @@
 import ScreenSaver
 import SwiftUI
 
-/// Hosts `DitherglowView` as a screen saver. Runs inside Apple's sandboxed `legacyScreenSaver`
-/// host with its own defaults, so it uses the default look rather than the app's settings.
-/// `@objc` keeps the class name stable for `NSPrincipalClass`.
+/// Hosts `DitherglowView` as a screen saver, with the app's pixel size, speed and location
+/// (see `AppSettings`). `@objc` keeps the class name stable for `NSPrincipalClass`.
 @objc(DitherglowSaverView)
 final class DitherglowSaverView: ScreenSaverView {
     private var host: NSHostingView<DitherglowView>?
@@ -26,14 +25,40 @@ final class DitherglowSaverView: ScreenSaverView {
         super.init(coder: coder)
     }
 
-    /// The TimelineView drives the frames, so animating means having the hosting view at all.
+    /// The System Settings preview doesn't always get `startAnimation` (a reopened sheet makes a new
+    /// instance that's only put in a window), so it would stay black: start it here too.
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        startPreviewIfReady()
+    }
+
+    /// The preview's instance starts at zero size and is sized after it's in a window.
+    override func setFrameSize(_ newSize: NSSize) {
+        super.setFrameSize(newSize)
+        startPreviewIfReady()
+    }
+
+    /// Waits for a real size: the preview's pixel size is scaled from its width.
+    private func startPreviewIfReady() {
+        guard isPreview, window != nil, bounds.width > 0, bounds.height > 0 else { return }
+        addHost()
+    }
+
     override func startAnimation() {
         super.startAnimation()
+        addHost()
+    }
+
+    /// The TimelineView drives the frames, so animating means having the hosting view at all.
+    private func addHost() {
         guard host == nil else { return }
+        let settings = AppSettings.load()
         let host = NSHostingView(rootView: DitherglowView(
+            location: settings.location,
+            speed: settings.speed,
             // Random so each screen (its own saver instance) shows a different pattern.
             seed: .random(in: 0..<100),
-            blockSize: blockSize
+            blockSize: blockSize(settings.blockSize)
         ))
         host.frame = bounds
         host.autoresizingMask = [.width, .height]
@@ -47,13 +72,11 @@ final class DitherglowSaverView: ScreenSaverView {
         host = nil
     }
 
-    /// Size of one dither pixel. The System Settings thumbnail is only a few hundred points wide,
+    /// Size of one dither pixel. The System Settings preview is only a few hundred points wide,
     /// so it's scaled to keep the full screen's block count and read as a miniature of it.
     /// Floored at 1 pt so the dither stays visible rather than blurring into a smooth gradient.
-    private var blockSize: Double {
-        guard isPreview, let screenWidth = NSScreen.main?.frame.width, screenWidth > 0 else {
-            return Preferences.defaultBlockSize
-        }
-        return max(1, Preferences.defaultBlockSize * bounds.width / screenWidth)
+    private func blockSize(_ size: Double) -> Double {
+        guard isPreview, let screenWidth = NSScreen.main?.frame.width, screenWidth > 0 else { return size }
+        return max(1, size * bounds.width / screenWidth)
     }
 }

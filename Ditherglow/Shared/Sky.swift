@@ -30,9 +30,14 @@ nonisolated enum Sky {
         Stop(altitude: 45, name: "Midday", colors: [0x5FA8E8, 0x9FD3F5, 0x7FC1EE, 0x3E8FDC, 0xFFF1C9, 0xE6F4FB]),
     ]
 
-    static func altitude(at date: Date) -> Double { Sun.altitude(at: date, Sun.location()) }
+    /// `location` defaults to the one chosen in Settings; the screen saver passes the app's, as it can't read them itself.
+    static func altitude(at date: Date, location: Sun.Location? = nil) -> Double {
+        Sun.altitude(at: date, location ?? Sun.location())
+    }
 
-    static func colors(at date: Date) -> [SIMD3<Float>] { colors(altitude: altitude(at: date)) }
+    static func colors(at date: Date, location: Sun.Location? = nil) -> [SIMD3<Float>] {
+        colors(altitude: altitude(at: date, location: location))
+    }
 
     /// The sky's six colours at `altitude` (degrees; negative is below the horizon).
     static func colors(altitude: Double) -> [SIMD3<Float>] {
