@@ -60,11 +60,13 @@ static float3 gradientLab(float2 uv, float aspect, float t, float seed, device c
     float accChroma = 0.0;
     float total = 0.0;
     for (int i = 0; i < n; i++) {
-        float fi = float(i) + seed;
-        // Each colour source wanders on its own Lissajous path.
+        float k = float(i);
+        float fi = k + seed;
+        // Each colour source wanders on its own Lissajous path. Speeds come from the index alone and the seed
+        // only shifts phases, so every seed drifts at the same pace.
         float2 c = float2(
-            aspect * (0.5 + 0.48 * sin(t * (0.23 + 0.071 * fi) + fi * 2.399)),
-            0.5 + 0.48 * cos(t * (0.19 + 0.053 * fi) + fi * 1.618));
+            aspect * (0.5 + 0.48 * sin(t * (0.23 + 0.071 * k) + fi * 2.399)),
+            0.5 + 0.48 * cos(t * (0.19 + 0.053 * k) + fi * 1.618));
         // Softened distance: plain IDW spikes at each source and leaves a visible pinch.
         float2 dv = w - c;
         float d = sqrt(dot(dv, dv) + 0.03);
