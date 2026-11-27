@@ -6,6 +6,7 @@ import Foundation
 nonisolated struct AppSettings {
     var blockSize = Preferences.defaultBlockSize
     var speed = Preferences.defaultSpeed
+    var grain = Preferences.defaultGrain
     var location: Sun.Location
 
     /// The app's bundle identifier, which names its preferences file.
@@ -23,6 +24,9 @@ nonisolated struct AppSettings {
         }
         if defaults.object(forKey: Preferences.speedKey) != nil {
             settings.speed = defaults.double(forKey: Preferences.speedKey).clamped(to: Preferences.speedRange)
+        }
+        if defaults.object(forKey: Preferences.grainKey) != nil {
+            settings.grain = defaults.double(forKey: Preferences.grainKey).clamped(to: Preferences.grainRange)
         }
         return settings
     }

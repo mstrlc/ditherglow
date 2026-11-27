@@ -1,7 +1,7 @@
 import ScreenSaver
 import SwiftUI
 
-/// Hosts `DitherglowView` as a screen saver, with the app's pixel size, speed and location
+/// Hosts `DitherglowView` as a screen saver, with the app's pixel size, speed, grain and location
 /// (see `AppSettings`). `@objc` keeps the class name stable for `NSPrincipalClass`.
 @objc(DitherglowSaverView)
 final class DitherglowSaverView: ScreenSaverView {
@@ -58,7 +58,8 @@ final class DitherglowSaverView: ScreenSaverView {
             speed: settings.speed,
             // Random so each screen (its own saver instance) shows a different pattern.
             seed: .random(in: 0..<100),
-            blockSize: blockSize(settings.blockSize)
+            blockSize: blockSize(settings.blockSize),
+            grain: settings.grain
         ))
         host.frame = bounds
         host.autoresizingMask = [.width, .height]
