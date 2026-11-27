@@ -39,7 +39,73 @@ nonisolated enum Sky {
         let (lower, upper, t) = bracket(altitude)
         // Smoothstep: lingers near each named phase, moves quicker between them.
         let k = Float(t * t * (3 - 2 * t))
-        return zip(lower.colors, upper.colors).map { simd_mix(rgb($0), rgb($1), SIMD3(repeating: k)) }
+        return zip(lower.colors, upper.colors).map { mix(rgb($0), rgb($1), k) }
+    }
+
+    /// Morphs one colour into another in OKLCh: lightness and chroma move linearly and the hue turns the short way
+    /// round, unless that's through green. Mixing in sRGB (or OKLab) sends opposite hues, like sunset orange into blue-hour blue, through grey.
+    private static func mix(_ a: SIMD3<Float>, _ b: SIMD3<Float>, _ k: Float) -> SIMD3<Float> {
+        guard k > 0 else { return a }
+        guard k < 1 else { return b }
+        let la = oklab(fromSRGB: a), lb = oklab(fromSRGB: b)
+        let ca = simd_length(SIMD2(la.y, la.z)), cb = simd_length(SIMD2(lb.y, lb.z))
+        // A near-grey end has no meaningful hue; take the other end's, so it fades in or out without a hue sweep.
+        let greyChroma: Float = 0.02
+        var ha = atan2(la.z, la.y), hb = atan2(lb.z, lb.y)
+        if ca < greyChroma { ha = hb }
+        if cb < greyChroma { hb = ha }
+        var dh = wrapped(hb - ha)
+        // Skies aren't green: if the short way passes through green (OKLab hue ~145°), go round via pink and violet.
+        let toGreen = wrapped(145 * .pi / 180 - ha)
+        if dh > 0 ? (toGreen > 0 && toGreen < dh) : (toGreen < 0 && toGreen > dh) {
+            dh -= (dh > 0 ? 2 : -2) * .pi
+        }
+        let hue = ha + dh * k, chroma = ca + (cb - ca) * k
+        let lab = SIMD3(la.x + (lb.x - la.x) * k, chroma * cos(hue), chroma * sin(hue))
+        return srgb(fromOklab: lab)
+    }
+
+    /// An angle in -π...π.
+    private static func wrapped(_ angle: Float) -> Float {
+        var a = angle
+        while a > .pi {
+            a -= 2 * .pi
+        }
+        while a < -.pi {
+            a += 2 * .pi
+        }
+        return a
+    }
+
+    private static func oklab(fromSRGB c: SIMD3<Float>) -> SIMD3<Float> {
+        let rgb = SIMD3(linear(c.x), linear(c.y), linear(c.z))
+        let l = cbrt(simd_dot(SIMD3(0.4122214708, 0.5363325363, 0.0514459929), rgb))
+        let m = cbrt(simd_dot(SIMD3(0.2119034982, 0.6806995451, 0.1073969566), rgb))
+        let s = cbrt(simd_dot(SIMD3(0.0883024619, 0.2817188376, 0.6299787005), rgb))
+        return SIMD3(0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+                     1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+                     0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s)
+    }
+
+    /// Back to sRGB, clamped: a hue swept round at full chroma can leave the gamut.
+    private static func srgb(fromOklab c: SIMD3<Float>) -> SIMD3<Float> {
+        var l = c.x + 0.3963377774 * c.y + 0.2158037573 * c.z
+        var m = c.x - 0.1055613458 * c.y - 0.0638541728 * c.z
+        var s = c.x - 0.0894841775 * c.y - 1.2914855480 * c.z
+        l = l * l * l
+        m = m * m * m
+        s = s * s * s
+        let rgb = SIMD3(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+                        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+                        -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)
+        return simd_clamp(SIMD3(encode(rgb.x), encode(rgb.y), encode(rgb.z)), SIMD3(repeating: 0), SIMD3(repeating: 1))
+    }
+
+    private static func linear(_ x: Float) -> Float { x <= 0.04045 ? x / 12.92 : pow((x + 0.055) / 1.055, 2.4) }
+
+    private static func encode(_ x: Float) -> Float {
+        let x = max(x, 0)
+        return x <= 0.0031308 ? x * 12.92 : 1.055 * pow(x, 1 / 2.4) - 0.055
     }
 
     /// The stops either side of `altitude` and how far it sits between them (0...1).

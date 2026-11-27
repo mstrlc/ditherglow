@@ -28,7 +28,7 @@ scripts/check.sh   # both, as the git hooks run them
 | `Ditherglow/macOS/Updater.swift` | Sparkle updater wrapper for the menu and Settings; feed URL in `macOS/Info.plist` |
 | `Ditherglow/Shared/DitherglowView.swift` | `TimelineView` at 12 fps feeding the Metal shader via `colorEffect` |
 | `Ditherglow/Shared/Ditherglow.metal` | Single stitchable pass: OKLab blob gradient evaluated once per dither block + 8×8 Bayer dither |
-| `Ditherglow/Shared/Sky.swift` | Daybreak palette: named stops keyed by sun altitude, smoothstep-blended |
+| `Ditherglow/Shared/Sky.swift` | Daybreak palette: named stops keyed by sun altitude, smoothstep-blended in OKLCh (never through grey or green) |
 | `Ditherglow/Shared/Sun.swift` | Solar altitude and location from the bundled `Shared/zone.tab` (no location permission) |
 | `Ditherglow/Shared/Preferences.swift` | `UserDefaults` keys, defaults and ranges |
 
