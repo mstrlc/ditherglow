@@ -11,6 +11,8 @@ struct DitherglowView: View {
     var seed: Float = 0
     /// Size of one dither pixel, in points.
     var blockSize: Double = 4
+    /// Opacity of the film grain laid over the sky; see `Preferences.grainKey`.
+    var grain: Double = Preferences.defaultGrain
     /// The sky moves slowly; a low frame rate is plenty and saves power.
     var framesPerSecond: Double = 12
     /// Stops drawing frames while nobody can see the sky. Animation time follows the clock,
@@ -47,6 +49,12 @@ struct DitherglowView: View {
                         .floatArray(colors)
                     ))
                 }
+        }
+        .overlay {
+            if grain > 0 {
+                GrainOverlay()
+                    .opacity(grain)
+            }
         }
         .ignoresSafeArea()
         .onChange(of: speed) { oldSpeed, _ in
