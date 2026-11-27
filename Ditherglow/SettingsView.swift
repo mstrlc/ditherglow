@@ -3,7 +3,7 @@ import ServiceManagement
 import SwiftUI
 
 /// Settings, under the preview: where the sun is followed, how big the dither pixels are, how fast the blobs drift, grain,
-/// launching at login and update checks.
+/// launching at login, the screen saver and update checks.
 struct SettingsView: View {
     @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
     @AppStorage(Preferences.speedKey) private var speed = Preferences.defaultSpeed
@@ -14,6 +14,7 @@ struct SettingsView: View {
     @AppStorage(Preferences.currentLatitudeKey) private var currentLatitude: Double?
     /// Mirrors `SMAppService` rather than `UserDefaults`, since the user can also change it in System Settings.
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
+    @State private var saver = SaverInstaller()
     @Environment(Updater.self) private var updater
     @Environment(CurrentLocation.self) private var currentLocation
 
@@ -120,6 +121,13 @@ struct SettingsView: View {
                 )) {
                     SettingLabel("Launch at login", systemImage: "power", color: .green)
                 }
+                if saver.state != .unavailable {
+                    LabeledContent {
+                        saverStatus
+                    } label: {
+                        SettingLabel("Screen saver", systemImage: "display", color: .indigo)
+                    }
+                }
                 Toggle(isOn: Bindable(updater).automaticallyChecksForUpdates) {
                     SettingLabel("Automatically check for updates", systemImage: "arrow.triangle.2.circlepath", color: .gray)
                 }
@@ -129,7 +137,11 @@ struct SettingsView: View {
         // Sized to its sections rather than scrolling: the window fits its content.
         .scrollDisabled(true)
         .fixedSize(horizontal: false, vertical: true)
-        .onAppear { launchAtLogin = SMAppService.mainApp.status == .enabled }
+        .onAppear {
+            launchAtLogin = SMAppService.mainApp.status == .enabled
+            // The user may have removed or replaced the saver while the window was closed.
+            saver.refresh()
+        }
     }
 
     /// zone.tab's cities by their identifier's region ("Africa", "America", …), so the long list has signposts.
@@ -155,6 +167,31 @@ struct SettingsView: View {
                 Text("Found")
             } else {
                 Text(currentLocation.failed ? "Couldn't find your location" : "Locating…")
+            }
+        }
+    }
+
+    /// Install or update, then show where to pick it; once it's current, just the way there.
+    private var saverStatus: some View {
+        HStack {
+            if let error = saver.error {
+                Text(error)
+                    .foregroundStyle(.red)
+                    .lineLimit(1)
+                    .help(error)
+            }
+            switch saver.state {
+            case .notInstalled, .outdated:
+                Button(saver.state == .outdated ? "Update" : "Install") {
+                    saver.install()
+                    if saver.state == .installed { saver.openSettings() }
+                }
+                .help("Copies the screen saver to ~/Library/Screen Savers, then opens Wallpaper settings to pick it")
+            case .installed:
+                Button("Open Settings") { saver.openSettings() }
+                    .help("Pick Ditherglow under Wallpaper → Screen Saver…")
+            case .unavailable:
+                EmptyView()
             }
         }
     }
