@@ -6,5 +6,8 @@ cd "$(dirname "$0")/.."
 # Since Xcode 26 the Metal compiler is a separate download, and the shader can't build without it.
 xcrun metal -v >/dev/null 2>&1 || xcodebuild -downloadComponent MetalToolchain
 
-xcodebuild -project Ditherglow.xcodeproj -scheme Ditherglow -configuration Debug \
-    -destination 'generic/platform=macOS' -derivedDataPath build/ci CODE_SIGNING_ALLOWED=NO -quiet build
+# The app, then the screen saver, which shares Shared/ with it.
+for scheme in Ditherglow DitherglowSaver; do
+    xcodebuild -project Ditherglow.xcodeproj -scheme "$scheme" -configuration Debug \
+        -destination 'generic/platform=macOS' -derivedDataPath build/ci CODE_SIGNING_ALLOWED=NO -quiet build
+done

@@ -26,14 +26,19 @@
 		D10000000000000000000020 /* Exceptions for "Ditherglow" folder in "DitherglowSaver" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AboutView.swift,
 				AppIcon.icon,
 				Assets.xcassets,
 				ContentView.swift,
 				DitherglowApp.swift,
 				SettingsView.swift,
+				macOS/CurrentLocation.swift,
 				macOS/DesktopWindowController.swift,
+				macOS/DockPresence.swift,
 				macOS/Info.plist,
 				macOS/MenuBarIcon.swift,
+				macOS/SunMenuSection.swift,
+				macOS/SunTimes.swift,
 				macOS/Updater.swift,
 			);
 			target = D10000000000000000000024 /* DitherglowSaver */;
