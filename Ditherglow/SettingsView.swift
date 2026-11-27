@@ -2,11 +2,12 @@ import CoreLocation
 import ServiceManagement
 import SwiftUI
 
-/// Settings, under the preview: where the sun is followed, how big the dither pixels are, how fast the blobs drift,
+/// Settings, under the preview: where the sun is followed, how big the dither pixels are, how fast the blobs drift, grain,
 /// launching at login and update checks.
 struct SettingsView: View {
     @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
     @AppStorage(Preferences.speedKey) private var speed = Preferences.defaultSpeed
+    @AppStorage(Preferences.grainKey) private var grain = Preferences.defaultGrain
     @AppStorage(Preferences.locationModeKey) private var locationMode = Preferences.defaultLocationMode
     @AppStorage(Preferences.cityKey) private var city = TimeZone.current.identifier
     @AppStorage(Preferences.currentPlaceKey) private var currentPlace: String?
@@ -44,6 +45,18 @@ struct SettingsView: View {
                     SettingLabel("Speed", systemImage: "hare.fill", color: .orange)
                 }
                 .help("Roughly how long one blob takes to loop around")
+                LabeledContent {
+                    HStack {
+                        Slider(value: $grain, in: Preferences.grainRange)
+                        Text(grain / Preferences.grainRange.upperBound, format: .percent.precision(.fractionLength(0)))
+                            .monospacedDigit()
+                            .foregroundStyle(.secondary)
+                            .frame(width: 40, alignment: .trailing)
+                    }
+                    .frame(width: 220)
+                } label: {
+                    SettingLabel("Grain", systemImage: "circle.grid.3x3.fill", color: .gray)
+                }
             } header: {
                 Text("Appearance")
             } footer: {
@@ -52,8 +65,9 @@ struct SettingsView: View {
                     Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
                         blockSize = Preferences.defaultBlockSize
                         speed = Preferences.defaultSpeed
+                        grain = Preferences.defaultGrain
                     }
-                    .disabled(blockSize == Preferences.defaultBlockSize && speed == Preferences.defaultSpeed)
+                    .disabled(blockSize == Preferences.defaultBlockSize && speed == Preferences.defaultSpeed && grain == Preferences.defaultGrain)
                 }
             }
 

@@ -16,6 +16,11 @@ nonisolated enum Preferences {
     static let defaultSpeed = 0.05
     static let speedRange = 0.01...0.5
 
+    /// Opacity of the film grain over the sky, see `GrainOverlay`. Shown as a percentage of the range.
+    static let grainKey = "grain"
+    static let defaultGrain = 0.12
+    static let grainRange = 0.0...0.25
+
     /// Where the sky follows the sun, see `Sun.location()`.
     enum LocationMode: String, CaseIterable, Sendable {
         /// The time zone's reference city: no permission needed, but can be far off in a wide zone.

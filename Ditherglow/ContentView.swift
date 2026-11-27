@@ -18,9 +18,10 @@ private struct PreviewView: View {
     @State private var followsClock = true
     @State private var hour = 12.0
     @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
+    @AppStorage(Preferences.grainKey) private var grain = Preferences.defaultGrain
 
     var body: some View {
-        DitherglowView(dateOverride: followsClock ? nil : previewDate, speed: 0.5, blockSize: blockSize)
+        DitherglowView(dateOverride: followsClock ? nil : previewDate, speed: 0.5, blockSize: blockSize, grain: grain)
             .overlay(alignment: .bottom) {
                 HStack {
                     Toggle("Live", isOn: $followsClock)

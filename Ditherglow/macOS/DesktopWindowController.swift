@@ -143,12 +143,14 @@ private struct DesktopSkyView: View {
     let controller: DesktopWindowController
     @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
     @AppStorage(Preferences.speedKey) private var speed = Preferences.defaultSpeed
+    @AppStorage(Preferences.grainKey) private var grain = Preferences.defaultGrain
 
     var body: some View {
         DitherglowView(
             speed: speed,
             seed: seed,
             blockSize: blockSize,
+            grain: grain,
             isPaused: window.isOccluded || controller.isSuspended
         )
     }
