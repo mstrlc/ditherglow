@@ -25,6 +25,7 @@ scripts/check.sh   # both, as the git hooks run them
 | `Ditherglow/macOS/DesktopWindowController.swift` | One borderless window per screen at desktop level, rebuilt on screen changes; pauses a covered screen, and all of them while displays sleep or the session is locked |
 | `Ditherglow/macOS/DockPresence.swift` | Dock icon and app menu while a window is open; menu bar only otherwise |
 | `Ditherglow/macOS/MenuBarIcon.swift` | 16×16 pixel-art orb template image for the menu bar (lit / outline) |
+| `Ditherglow/macOS/SaverInstaller.swift` | Installs or updates the `Ditherglow.saver` the app embeds (Embed Screen Saver phase) into `~/Library/Screen Savers`, from Settings |
 | `Ditherglow/macOS/Updater.swift` | Sparkle updater wrapper for the menu and Settings; feed URL in `macOS/Info.plist` |
 | `DitherglowSaver/DitherglowSaverView.swift` | `ScreenSaverView` hosting `DitherglowView` for the `Ditherglow.saver` target |
 | `DitherglowSaver/AppSettings.swift` | The app's settings for the saver, read from its preferences file (the sandboxed host has its own defaults but may read any file) |

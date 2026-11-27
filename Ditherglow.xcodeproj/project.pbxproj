@@ -8,7 +8,32 @@
 
 /* Begin PBXBuildFile section */
 		D1000000000000000000001C /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = D1000000000000000000001B /* Sparkle */; };
+		D10000000000000000000028 /* Ditherglow.saver in Embed Screen Saver */ = {isa = PBXBuildFile; fileRef = D1000000000000000000001E /* Ditherglow.saver */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D1000000000000000000002A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D10000000000000000000004 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D10000000000000000000024;
+			remoteInfo = DitherglowSaver;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D10000000000000000000029 /* Embed Screen Saver */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				D10000000000000000000028 /* Ditherglow.saver in Embed Screen Saver */,
+			);
+			name = "Embed Screen Saver";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D1000000000000000000000A /* Ditherglow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ditherglow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,6 +62,7 @@
 				macOS/DockPresence.swift,
 				macOS/Info.plist,
 				macOS/MenuBarIcon.swift,
+				macOS/SaverInstaller.swift,
 				macOS/SunMenuSection.swift,
 				macOS/SunTimes.swift,
 				macOS/Updater.swift,
@@ -130,10 +156,12 @@
 				D1000000000000000000000D /* Sources */,
 				D1000000000000000000000C /* Frameworks */,
 				D1000000000000000000000E /* Resources */,
+				D10000000000000000000029 /* Embed Screen Saver */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D1000000000000000000002B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D1000000000000000000000B /* Ditherglow */,
@@ -221,19 +249,27 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		D1000000000000000000002B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D10000000000000000000024 /* DitherglowSaver */;
+			targetProxy = D1000000000000000000002A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		D10000000000000000000026 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = DitherglowSaverView;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = eu.mstrlc.ditherglow.saver;
 				PRODUCT_MODULE_NAME = DitherglowSaver;
 				PRODUCT_NAME = Ditherglow;
@@ -252,13 +288,13 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = DitherglowSaverView;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = eu.mstrlc.ditherglow.saver;
 				PRODUCT_MODULE_NAME = DitherglowSaver;
 				PRODUCT_NAME = Ditherglow;
