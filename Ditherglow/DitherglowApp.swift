@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct DitherglowApp: App {
     @State private var desktop = DesktopWindowController()
+    @State private var staticWallpaper = StaticWallpaper()
     @State private var updater = Updater()
     @State private var sunTimes = SunTimes()
     @State private var currentLocation = CurrentLocation()

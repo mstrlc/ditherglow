@@ -6,6 +6,12 @@ nonisolated enum Preferences {
     static let wallpaperEnabledKey = "wallpaperEnabled"
     static let defaultWallpaperEnabled = true
 
+    /// Whether a still of the sky is also kept as the system desktop picture, see `StaticWallpaper`.
+    static let staticWallpaperKey = "staticWallpaper"
+    static let defaultStaticWallpaper = true
+    /// The desktop pictures the stills replaced, by display ID, put back when this is turned off.
+    static let originalWallpapersKey = "originalWallpapers"
+
     /// Size of one dither pixel, in points.
     static let blockSizeKey = "blockSize"
     static let defaultBlockSize = 4.0

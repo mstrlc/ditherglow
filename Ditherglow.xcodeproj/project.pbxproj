@@ -63,6 +63,7 @@
 				macOS/Info.plist,
 				macOS/MenuBarIcon.swift,
 				macOS/SaverInstaller.swift,
+				macOS/StaticWallpaper.swift,
 				macOS/SunMenuSection.swift,
 				macOS/SunTimes.swift,
 				macOS/Updater.swift,

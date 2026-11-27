@@ -8,6 +8,7 @@ struct SettingsView: View {
     @AppStorage(Preferences.blockSizeKey) private var blockSize = Preferences.defaultBlockSize
     @AppStorage(Preferences.speedKey) private var speed = Preferences.defaultSpeed
     @AppStorage(Preferences.grainKey) private var grain = Preferences.defaultGrain
+    @AppStorage(Preferences.staticWallpaperKey) private var staticWallpaper = Preferences.defaultStaticWallpaper
     @AppStorage(Preferences.locationModeKey) private var locationMode = Preferences.defaultLocationMode
     @AppStorage(Preferences.cityKey) private var city = TimeZone.current.identifier
     @AppStorage(Preferences.currentPlaceKey) private var currentPlace: String?
@@ -114,6 +115,10 @@ struct SettingsView: View {
             }
 
             Section("General") {
+                Toggle(isOn: $staticWallpaper) {
+                    SettingLabel("Set as desktop picture", systemImage: "photo.fill", color: .teal)
+                }
+                .help("Keeps a still of the sky as the system wallpaper, shown while editing widgets or after quitting")
                 Toggle(isOn: Binding(
                     get: { launchAtLogin },
                     // A closure, not the method itself: Swift 6.3 (Xcode 26) crashes generating code for the method reference.
